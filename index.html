@@ -749,5 +749,26 @@ if(!member(data.members.find(m=>m.name===data.currentUser)?.id)) {
 }
 render();
 </script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXWw6Bu9KIxUK3rBIj71PIJJp1zqxVtLE",
+  authDomain: "famsync-755b8.firebaseapp.com",
+  projectId: "famsync-755b8",
+  storageBucket: "famsync-755b8.firebasestorage.app",
+  messagingSenderId: "515752003098",
+  appId: "1:515752003098:web:e8d6157ce02f044dc3f3a3"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+console.log("Firebase connected!");
+</script>
 </body>
 </html>
+
