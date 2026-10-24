@@ -5,6 +5,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FamSync | Your Family Hub</title>
+  #authScreen {
+  max-width: 420px;
+  margin: 70px auto;
+  padding: 25px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+#authScreen h2 { margin-top: 0; }
+#authScreen input, #authScreen button { margin-top: 10px; }
+#authMessage { color: var(--muted); font-size: 13px; }
+body:not(.logged-in) .app { display: none; }
 <style>
 :root {
   --bg:#10111a; --panel:#191b28; --panel2:#202335;
@@ -750,8 +762,12 @@ if(!member(data.members.find(m=>m.name===data.currentUser)?.id)) {
 render();
 </script>
   <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -767,8 +783,91 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const screen = document.getElementById("authScreen");
+const form = document.getElementById("authForm");
+const email = document.getElementById("authEmail");
+const password = document.getElementById("authPassword");
+const message = document.getElementById("authMessage");
+
+function showError(error) {
+  const errors = {
+    "auth/invalid-credential": "Incorrect email or password.",
+    "auth/email-already-in-use": "That email already has an account. Sign in instead.",
+    "auth/weak-password": "Your password needs at least 6 characters.",
+    "auth/invalid-email": "Enter a valid email address.",
+    "auth/popup-closed-by-user": "Google sign-in was canceled.",
+    "auth/popup-blocked": "Your browser blocked the Google sign-in pop-up."
+  };
+  message.textContent = errors[error.code] || error.message || "Something went wrong.";
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  message.textContent = "Signing in...";
+  try {
+    await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.getElementById("signupBtn").addEventListener("click", async () => {
+  message.textContent = "Creating account...";
+  try {
+    await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.getElementById("googleBtn").addEventListener("click", async () => {
+  message.textContent = "Opening Google sign-in...";
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  } catch (error) {
+    showError(error);
+  }
+});
+
+const signOutButton = document.createElement("button");
+signOutButton.className = "btn btn-secondary";
+signOutButton.textContent = "Sign Out";
+signOutButton.style.display = "none";
+document.querySelector(".top-actions").appendChild(signOutButton);
+
+signOutButton.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  document.body.classList.toggle("logged-in", !!user);
+  screen.style.display = user ? "none" : "block";
+  signOutButton.style.display = user ? "" : "none";
+
+  if (user) {
+    console.log("Signed in:", user.email);
+  }
+});
+
 console.log("Firebase connected!");
 </script>
+</script>
 </body>
+  <div id="authScreen">
+  <h2>Welcome to FamSync</h2>
+  <p class="subtitle">Sign in or create your family account.</p>
+  <form id="authForm">
+    <input id="authEmail" type="email" placeholder="Email address" required>
+    <input id="authPassword" type="password" placeholder="Password (6+ characters)" minlength="6" required>
+    <button class="btn btn-primary" style="width:100%">Sign In</button>
+  </form>
+  <button id="signupBtn" class="btn btn-secondary" style="width:100%">Create Account</button>
+  <button id="googleBtn" class="btn btn-secondary" style="width:100%">Continue with Google</button>
+  <p id="authMessage"></p>
+</div>
 </html>
 
