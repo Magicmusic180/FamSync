@@ -5,155 +5,120 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FamSync | Your Family Hub</title>
-  #authScreen {
-  max-width: 420px;
-  margin: 70px auto;
-  padding: 25px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-#authScreen h2 { margin-top: 0; }
-#authScreen input, #authScreen button { margin-top: 10px; }
-#authMessage { color: var(--muted); font-size: 13px; }
-body:not(.logged-in) .app { display: none; }
 <style>
-:root {
-  --bg:#10111a; --panel:#191b28; --panel2:#202335;
-  --purple:#9585ff; --text:#f5f5ff; --muted:#a1a5bb;
-  --border:#303247; --green:#72e6b0; --red:#ff858f;
-}
-* {box-sizing:border-box}
-body {margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,system-ui,-apple-system,sans-serif}
-button,input,select,textarea {font:inherit}
-button {cursor:pointer}
-.app {display:flex;min-height:100vh}
-.sidebar {width:245px;background:#141521;border-right:1px solid var(--border);
-  padding:24px 15px;display:flex;flex-direction:column;gap:25px;flex-shrink:0}
-.logo {display:flex;align-items:center;gap:11px;padding:0 10px}
-.logo-icon {background:var(--purple);color:#171327;width:39px;height:39px;
-  border-radius:13px;display:grid;place-items:center;font-size:22px;font-weight:900}
-.logo h2 {margin:0;font-size:21px;letter-spacing:-1px}
-.logo small {color:var(--muted);font-size:11px}
-.nav-label {color:#777c96;font-size:10px;font-weight:800;letter-spacing:1.5px;
-  padding:0 12px;margin-bottom:7px}
-.nav {display:flex;flex-direction:column;gap:5px}
-.nav button {background:transparent;border:0;color:var(--muted);text-align:left;
-  padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;font-size:13px}
-.nav button:hover,.nav button.active {background:#29263f;color:white}
-.nav button.active {box-shadow:inset 3px 0 var(--purple)}
-.nav-icon {width:20px;text-align:center;font-size:16px}
-.sidebar-bottom {margin-top:auto;border:1px solid var(--border);background:var(--panel);
-  border-radius:13px;padding:14px;font-size:12px;color:var(--muted)}
-.sidebar-bottom strong {display:block;color:white;margin-bottom:5px}
-main {flex:1;min-width:0;padding:30px clamp(16px,4vw,45px);max-width:1600px;margin:0 auto;width:100%}
-.topbar {display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:30px}
-.eyebrow {color:var(--purple);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-h1 {font-size:clamp(25px,3vw,34px);letter-spacing:-1.1px;margin:6px 0}
-.subtitle {color:var(--muted);font-size:13px;margin:7px 0 0}
-.top-actions {display:flex;gap:9px;align-items:center}
-.avatar {width:39px;height:39px;border-radius:13px;background:#393452;display:grid;
-  place-items:center;font-weight:800;color:#dcd4ff}
-.btn {border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:12px}
-.btn-primary {background:var(--purple);color:#171327}
-.btn-secondary {background:var(--panel2);color:var(--text);border:1px solid var(--border)}
-.btn:hover {filter:brightness(1.1)}
-.grid {display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
-.card {background:var(--panel);border:1px solid var(--border);border-radius:16px;
-  padding:20px;min-width:0}
-.span-3 {grid-column:span 3}.span-4 {grid-column:span 4}
-.span-5 {grid-column:span 5}.span-6 {grid-column:span 6}
-.span-7 {grid-column:span 7}.span-8 {grid-column:span 8}.span-12 {grid-column:span 12}
-.stat-label {color:var(--muted);font-size:12px}
-.stat-value {font-size:29px;font-weight:800;letter-spacing:-1px;margin:13px 0 5px}
-.stat-foot {font-size:11px;color:var(--muted)}
-.stat-icon {float:right;font-size:20px;background:var(--panel2);padding:9px;border-radius:11px}
-.section-head {display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
-.section-head h2 {font-size:16px;margin:0}
-.section-head p {font-size:12px;color:var(--muted);margin:5px 0 0}
-.text-link {color:var(--purple);background:none;border:0;font-size:12px;font-weight:700}
-.list {display:flex;flex-direction:column;gap:9px}
-.item {display:flex;align-items:center;gap:11px;background:var(--panel2);
-  padding:12px;border-radius:11px;min-width:0}
-.item-main {flex:1;min-width:0}
-.item-title {font-size:13px;font-weight:700;overflow-wrap:anywhere}
-.item-sub {font-size:11px;color:var(--muted);margin-top:4px}
-.check {width:18px;height:18px;accent-color:var(--purple);flex-shrink:0}
-.done .item-title {text-decoration:line-through;color:var(--muted)}
-.pill {background:#302b4c;color:#c9c0ff;padding:5px 8px;border-radius:7px;
-  font-size:10px;font-weight:800;white-space:nowrap}
-.green {color:var(--green)} .muted {color:var(--muted)}
-.empty {padding:25px 10px;text-align:center;color:var(--muted);font-size:12px}
-input,select,textarea {background:#11131e;color:white;border:1px solid var(--border);
-  border-radius:9px;padding:11px;width:100%;outline:none;min-width:0}
-input:focus,select:focus,textarea:focus {border-color:var(--purple)}
-label {display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
-.form {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field {min-width:0}.field.full {grid-column:1/-1}
-.form-actions {grid-column:1/-1;display:flex;justify-content:flex-end}
-.form-actions button {width:auto}
-.progress {height:6px;background:#303247;border-radius:9px;overflow:hidden;margin-top:12px}
-.progress div {height:100%;background:var(--purple);border-radius:9px}
-.member {display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.member:last-child {border-bottom:0}
-.member-avatar {width:39px;height:39px;border-radius:13px;background:#38314f;
-  display:grid;place-items:center;font-size:18px;flex-shrink:0}
-.member-info {flex:1;min-width:0}.member-name {font-size:13px;font-weight:700}
-.member-role {font-size:11px;color:var(--muted);margin-top:4px}
-.vote-option {display:flex;justify-content:space-between;align-items:center;gap:10px;
-  padding:11px;background:var(--panel2);border-radius:9px;margin-top:8px;font-size:12px}
-.vote-bar {height:4px;background:#34364b;border-radius:5px;margin-top:7px}
-.vote-bar div {height:100%;background:var(--purple);border-radius:5px}
-.calendar {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.day-name {text-align:center;color:var(--muted);font-size:10px;padding:8px 0}
-.day {min-height:67px;background:var(--panel2);border-radius:8px;padding:7px 5px;
-  border:1px solid transparent;font-size:11px}
-.day.today {border-color:var(--purple);color:var(--purple)}
-.day-event {margin-top:5px;background:#393052;color:#d8ceff;border-radius:4px;
-  padding:3px;font-size:9px;overflow-wrap:anywhere}
-.chat-box {height:310px;overflow:auto;display:flex;flex-direction:column;gap:10px;
-  padding:10px 0}
-.chat-msg {background:var(--panel2);border-radius:12px;padding:11px;max-width:85%;align-self:flex-start}
-.chat-msg.mine {align-self:flex-end;background:#393052}
-.chat-author {font-size:10px;color:var(--purple);font-weight:800;margin-bottom:5px}
-.chat-text {font-size:12px;overflow-wrap:anywhere;white-space:pre-wrap}
-.chat-time {font-size:9px;color:var(--muted);margin-top:5px}
-.rule {padding:13px;background:var(--panel2);border-radius:10px;margin-bottom:9px;
-  font-size:12px;display:flex;gap:10px;align-items:center}
-.rule span {flex:1}
-.badge {font-size:10px;background:#2a493f;color:var(--green);padding:5px 8px;border-radius:7px}
-.notice {background:#24213a;border:1px solid #42395f;border-radius:12px;padding:13px;
-  color:#d5ceff;font-size:12px;line-height:1.6;margin-bottom:18px}
-.hidden {display:none!important}
-.footer {text-align:center;color:#656982;font-size:10px;margin-top:28px}
-@media(max-width:950px) {
- .sidebar {width:205px}.span-3 {grid-column:span 6}
- .span-4,.span-5,.span-7,.span-8 {grid-column:span 12}
-}
-@media(max-width:650px) {
- .app {display:block}.sidebar {width:100%;padding:13px;border-right:0;border-bottom:1px solid var(--border);gap:12px}
- .logo {padding:0 5px}.nav-label,.sidebar-bottom {display:none}
- .nav {display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding-bottom:2px}
- .nav button {white-space:nowrap;padding:10px;font-size:11px}
- .nav button.active {box-shadow:inset 0 -3px var(--purple)}
- main {padding:22px 14px}
- .topbar {align-items:flex-start}.top-actions {flex-wrap:wrap;justify-content:flex-end}
- .span-3,.span-6 {grid-column:span 12}
- .card {padding:15px}.form {grid-template-columns:1fr}
- .field.full,.form-actions {grid-column:1}
- .day {min-height:48px;padding:4px;font-size:10px}
- .day-event {font-size:8px}
-}
+#authScreen{max-width:420px;margin:70px auto;padding:25px;background:var(--panel);border:1px solid var(--border);border-radius:16px}
+#authScreen h2{margin-top:0}
+#authScreen input,#authScreen button{margin-top:10px}
+#authMessage{color:var(--muted);font-size:13px}
+body:not(.logged-in) .app{display:none}
+:root{--bg:#10111a;--panel:#191b28;--panel2:#202335;--purple:#9585ff;--text:#f5f5ff;--muted:#a1a5bb;--border:#303247;--green:#72e6b0;--red:#ff858f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;background:#141521;border-right:1px solid var(--border);padding:24px 15px;display:flex;flex-direction:column;gap:25px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:11px;padding:0 10px}
+.logo-icon{background:var(--purple);color:#171327;width:39px;height:39px;border-radius:13px;display:grid;place-items:center;font-size:22px;font-weight:900}
+.logo h2{margin:0;font-size:21px;letter-spacing:-1px}
+.logo small{color:var(--muted);font-size:11px}
+.nav-label{color:#777c96;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 12px;margin-bottom:7px}
+.nav{display:flex;flex-direction:column;gap:5px}
+.nav button{background:transparent;border:0;color:var(--muted);text-align:left;padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;font-size:13px}
+.nav button:hover,.nav button.active{background:#29263f;color:white}
+.nav button.active{box-shadow:inset 3px 0 var(--purple)}
+.nav-icon{width:20px;text-align:center;font-size:16px}
+.sidebar-bottom{margin-top:auto;border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:14px;font-size:12px;color:var(--muted)}
+.sidebar-bottom strong{display:block;color:white;margin-bottom:5px}
+main{flex:1;min-width:0;padding:30px clamp(16px,4vw,45px);max-width:1600px;margin:0 auto;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:30px}
+.eyebrow{color:var(--purple);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-size:clamp(25px,3vw,34px);letter-spacing:-1.1px;margin:6px 0}
+.subtitle{color:var(--muted);font-size:13px;margin:7px 0 0}
+.top-actions{display:flex;gap:9px;align-items:center}
+.avatar{width:39px;height:39px;border-radius:13px;background:#393452;display:grid;place-items:center;font-weight:800;color:#dcd4ff}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:12px}
+.btn-primary{background:var(--purple);color:#171327}
+.btn-secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
+.btn:hover{filter:brightness(1.1)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;min-width:0}
+.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
+.stat-label{color:var(--muted);font-size:12px}
+.stat-value{font-size:29px;font-weight:800;letter-spacing:-1px;margin:13px 0 5px}
+.stat-foot{font-size:11px;color:var(--muted)}
+.stat-icon{float:right;font-size:20px;background:var(--panel2);padding:9px;border-radius:11px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
+.section-head h2{font-size:16px;margin:0}
+.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.text-link{color:var(--purple);background:none;border:0;font-size:12px;font-weight:700}
+.list{display:flex;flex-direction:column;gap:9px}
+.item{display:flex;align-items:center;gap:11px;background:var(--panel2);padding:12px;border-radius:11px;min-width:0}
+.item-main{flex:1;min-width:0}
+.item-title{font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.item-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.check{width:18px;height:18px;accent-color:var(--purple);flex-shrink:0}
+.done .item-title{text-decoration:line-through;color:var(--muted)}
+.pill{background:#302b4c;color:#c9c0ff;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:800;white-space:nowrap}
+.green{color:var(--green)}.muted{color:var(--muted)}
+.empty{padding:25px 10px;text-align:center;color:var(--muted);font-size:12px}
+input,select,textarea{background:#11131e;color:white;border:1px solid var(--border);border-radius:9px;padding:11px;width:100%;outline:none;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--purple)}
+label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{min-width:0}.field.full{grid-column:1/-1}
+.form-actions{grid-column:1/-1;display:flex;justify-content:flex-end}
+.form-actions button{width:auto}
+.progress{height:6px;background:#303247;border-radius:9px;overflow:hidden;margin-top:12px}
+.progress div{height:100%;background:var(--purple);border-radius:9px}
+.member{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.member:last-child{border-bottom:0}
+.member-avatar{width:39px;height:39px;border-radius:13px;background:#38314f;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.member-info{flex:1;min-width:0}.member-name{font-size:13px;font-weight:700}
+.member-role{font-size:11px;color:var(--muted);margin-top:4px}
+.vote-option{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;background:var(--panel2);border-radius:9px;margin-top:8px;font-size:12px}
+.vote-bar{height:4px;background:#34364b;border-radius:5px;margin-top:7px}
+.vote-bar div{height:100%;background:var(--purple);border-radius:5px}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.day-name{text-align:center;color:var(--muted);font-size:10px;padding:8px 0}
+.day{min-height:67px;background:var(--panel2);border-radius:8px;padding:7px 5px;border:1px solid transparent;font-size:11px}
+.day.today{border-color:var(--purple);color:var(--purple)}
+.day-event{margin-top:5px;background:#393052;color:#d8ceff;border-radius:4px;padding:3px;font-size:9px;overflow-wrap:anywhere}
+.chat-box{height:310px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:10px 0}
+.chat-msg{background:var(--panel2);border-radius:12px;padding:11px;max-width:85%;align-self:flex-start}
+.chat-msg.mine{align-self:flex-end;background:#393052}
+.chat-author{font-size:10px;color:var(--purple);font-weight:800;margin-bottom:5px}
+.chat-text{font-size:12px;overflow-wrap:anywhere;white-space:pre-wrap}
+.chat-time{font-size:9px;color:var(--muted);margin-top:5px}
+.rule{padding:13px;background:var(--panel2);border-radius:10px;margin-bottom:9px;font-size:12px;display:flex;gap:10px;align-items:center}
+.rule span{flex:1}
+.badge{font-size:10px;background:#2a493f;color:var(--green);padding:5px 8px;border-radius:7px}
+.notice{background:#24213a;border:1px solid #42395f;border-radius:12px;padding:13px;color:#d5ceff;font-size:12px;line-height:1.6;margin-bottom:18px}
+.hidden{display:none!important}
+.footer{text-align:center;color:#656982;font-size:10px;margin-top:28px}
+@media(max-width:950px){.sidebar{width:205px}.span-3{grid-column:span 6}.span-4,.span-5,.span-7,.span-8{grid-column:span 12}}
+@media(max-width:650px){.app{display:block}.sidebar{width:100%;padding:13px;border-right:0;border-bottom:1px solid var(--border);gap:12px}.logo{padding:0 5px}.nav-label,.sidebar-bottom{display:none}.nav{display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding-bottom:2px}.nav button{white-space:nowrap;padding:10px;font-size:11px}.nav button.active{box-shadow:inset 0 -3px var(--purple)}main{padding:22px 14px}.topbar{align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.span-3,.span-6{grid-column:span 12}.card{padding:15px}.form{grid-template-columns:1fr}.field.full,.form-actions{grid-column:1}.day{min-height:48px;padding:4px;font-size:10px}.day-event{font-size:8px}}
 </style>
 </head>
 <body>
+
+<!-- Login screen must be inside the body and before the dashboard. -->
+<div id="authScreen">
+  <h2>Welcome to FamSync</h2>
+  <p class="subtitle">Sign in or create your family account.</p>
+  <form id="authForm">
+    <input id="authEmail" type="email" placeholder="Email address" autocomplete="email" required>
+    <input id="authPassword" type="password" placeholder="Password (6+ characters)" minlength="6" autocomplete="current-password" required>
+    <button class="btn btn-primary" style="width:100%">Sign In</button>
+  </form>
+  <button id="signupBtn" class="btn btn-secondary" style="width:100%">Create Account</button>
+  <button id="googleBtn" class="btn btn-secondary" style="width:100%">Continue with Google</button>
+  <p id="authMessage" role="status"></p>
+</div>
+
 <div class="app">
 <aside class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">F</div>
-    <div><h2>FamSync</h2><small>YOUR FAMILY HUB</small></div>
-  </div>
+  <div class="logo"><div class="logo-icon">F</div><div><h2>FamSync</h2><small>YOUR FAMILY HUB</small></div></div>
   <div>
     <div class="nav-label">WORKSPACE</div>
     <nav class="nav" id="navigation">
@@ -170,305 +135,175 @@ label {display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
     <div class="nav-label">FAMILY</div>
     <nav class="nav">
       <button data-page="roster"><span class="nav-icon">♙</span>Family Roster</button>
-      <button data-page="settings"><span class="nav-icon">⚙</span>Rules & Settings</button>
+      <button data-page="settings"><span class="nav-icon">⚙</span>Rules &amp; Settings</button>
     </nav>
   </div>
-  <div class="sidebar-bottom">
-    <strong>✦ Family first</strong>
-    Keep everyone organized, connected, and on the same page.
-  </div>
+  <div class="sidebar-bottom"><strong>✦ Family first</strong>Keep everyone organized, connected, and on the same page.</div>
 </aside>
 
 <main>
-  <header class="topbar">
-    <div>
-      <div class="eyebrow" id="pageEyebrow">YOUR FAMILY WORKSPACE</div>
-      <h1 id="pageTitle">Family Dashboard</h1>
-      <p class="subtitle" id="pageSubtitle">Everything your family needs, all in one place.</p>
-    </div>
-    <div class="top-actions">
-      <button class="btn btn-secondary" id="switchView">↔ <span id="viewLabel">Parent View</span></button>
-      <div class="avatar" id="topAvatar">P</div>
-    </div>
-  </header>
-
-  <div class="notice">
-    <strong>Beta preview</strong> · Try the features and switch between Parent View and Member View.
-    This version saves data in this browser. Family-wide syncing and real accounts will come later.
+<header class="topbar">
+  <div>
+    <div class="eyebrow" id="pageEyebrow">YOUR FAMILY WORKSPACE</div>
+    <h1 id="pageTitle">Family Dashboard</h1>
+    <p class="subtitle" id="pageSubtitle">Everything your family needs, all in one place.</p>
   </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary" id="switchView">↔ <span id="viewLabel">Parent View</span></button>
+    <div class="avatar" id="topAvatar">P</div>
+  </div>
+</header>
 
-  <section id="page-dashboard" class="page">
-    <div class="grid">
-      <div class="card span-3"><span class="stat-icon">✓</span><div class="stat-label">Chores completed</div><div class="stat-value" id="statChores">0</div><div class="stat-foot">Completed in this beta</div></div>
-      <div class="card span-3"><span class="stat-icon">✧</span><div class="stat-label">Family points</div><div class="stat-value" id="statPoints">0</div><div class="stat-foot">Earned from completed chores</div></div>
-      <div class="card span-3"><span class="stat-icon">▦</span><div class="stat-label">Upcoming events</div><div class="stat-value" id="statEvents">0</div><div class="stat-foot">Scheduled family activities</div></div>
-      <div class="card span-3"><span class="stat-icon">🛒</span><div class="stat-label">Shopping items</div><div class="stat-value" id="statShopping">0</div><div class="stat-foot">Still on the list</div></div>
-      <div class="card span-7">
-        <div class="section-head"><div><h2>Today's Chores</h2><p>A little progress goes a long way.</p></div><button class="text-link" data-go="chores">View all →</button></div>
-        <div class="list" id="dashboardChores"></div>
-      </div>
-      <div class="card span-5">
-        <div class="section-head"><div><h2>Family Calendar</h2><p>What's coming up.</p></div><button class="text-link" data-go="calendar">View →</button></div>
-        <div class="list" id="dashboardEvents"></div>
-      </div>
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Reward Center</h2><p>Rewards worth working toward.</p></div><button class="text-link" data-go="rewards">Explore →</button></div>
-        <div class="list" id="dashboardRewards"></div>
-      </div>
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Family Votes</h2><p>Everyone gets a say.</p></div><button class="text-link" data-go="votes">View votes →</button></div>
-        <div class="list" id="dashboardVotes"></div>
-      </div>
-    </div>
-  </section>
+<div class="notice"><strong>Beta preview</strong> · Try the features and switch between Parent View and Member View. This version saves data in this browser. Family-wide syncing is not connected yet.</div>
 
-  <section id="page-calendar" class="page hidden">
-    <div class="grid">
-      <div class="card span-8">
-        <div class="section-head"><div><h2 id="calendarMonth">Calendar</h2><p>Keep family plans in one place.</p></div><div><button class="btn btn-secondary" id="prevMonth">←</button> <button class="btn btn-secondary" id="nextMonth">→</button></div></div>
-        <div class="calendar" id="calendarGrid"></div>
-      </div>
-      <div class="card span-4">
-        <div class="section-head"><div><h2>Add an event</h2><p>Plan something together.</p></div></div>
-        <form class="form" id="eventForm">
-          <div class="field full"><label>Event name</label><input name="title" placeholder="Family movie night" required></div>
-          <div class="field full"><label>Date</label><input name="date" type="date" required></div>
-          <div class="field full"><label>Time (optional)</label><input name="time" type="time"></div>
-          <div class="field full"><label>Who's invited?</label><select name="who"><option>Everyone</option><option>Parents</option><option>Kids</option></select></div>
-          <div class="form-actions"><button class="btn btn-primary">Add event</button></div>
-        </form>
-        <div class="section-head" style="margin-top:25px"><h2>Upcoming events</h2></div>
-        <div class="list" id="eventList"></div>
-      </div>
-    </div>
-  </section>
+<section id="page-dashboard" class="page">
+<div class="grid">
+  <div class="card span-3"><span class="stat-icon">✓</span><div class="stat-label">Chores completed</div><div class="stat-value" id="statChores">0</div><div class="stat-foot">Completed in this beta</div></div>
+  <div class="card span-3"><span class="stat-icon">✧</span><div class="stat-label">Family points</div><div class="stat-value" id="statPoints">0</div><div class="stat-foot">Earned from completed chores</div></div>
+  <div class="card span-3"><span class="stat-icon">▦</span><div class="stat-label">Upcoming events</div><div class="stat-value" id="statEvents">0</div><div class="stat-foot">Scheduled family activities</div></div>
+  <div class="card span-3"><span class="stat-icon">🛒</span><div class="stat-label">Shopping items</div><div class="stat-value" id="statShopping">0</div><div class="stat-foot">Still on the list</div></div>
+  <div class="card span-7"><div class="section-head"><div><h2>Today's Chores</h2><p>A little progress goes a long way.</p></div><button class="text-link" data-go="chores">View all →</button></div><div class="list" id="dashboardChores"></div></div>
+  <div class="card span-5"><div class="section-head"><div><h2>Family Calendar</h2><p>What's coming up.</p></div><button class="text-link" data-go="calendar">View →</button></div><div class="list" id="dashboardEvents"></div></div>
+  <div class="card span-6"><div class="section-head"><div><h2>Reward Center</h2><p>Rewards worth working toward.</p></div><button class="text-link" data-go="rewards">Explore →</button></div><div class="list" id="dashboardRewards"></div></div>
+  <div class="card span-6"><div class="section-head"><div><h2>Family Votes</h2><p>Everyone gets a say.</p></div><button class="text-link" data-go="votes">View votes →</button></div><div class="list" id="dashboardVotes"></div></div>
+</div>
+</section>
 
-  <section id="page-chores" class="page hidden">
-    <div class="grid">
-      <div class="card span-7">
-        <div class="section-head"><div><h2>Chores List</h2><p>Check off chores as you finish them.</p></div><span class="pill" id="choreCount">0 chores</span></div>
-        <div class="list" id="choreList"></div>
-      </div>
-      <div class="card span-5">
-        <div class="section-head"><div><h2>Add a chore</h2><p>Set a task and its points.</p></div></div>
-        <form class="form" id="choreForm">
-          <div class="field full"><label>Chore name</label><input name="title" placeholder="Vacuum the living room" required></div>
-          <div class="field"><label>Assigned to</label><select name="assignee" class="memberOptions"></select></div>
-          <div class="field"><label>Points</label><input name="points" type="number" min="1" max="1000" value="10" required></div>
-          <div class="form-actions"><button class="btn btn-primary">Add chore</button></div>
-        </form>
-        <p class="subtitle">Completing a chore awards its points in this beta.</p>
-      </div>
-    </div>
-  </section>
+<section id="page-calendar" class="page hidden"><div class="grid">
+  <div class="card span-8"><div class="section-head"><div><h2 id="calendarMonth">Calendar</h2><p>Keep family plans in one place.</p></div><div><button class="btn btn-secondary" id="prevMonth">←</button> <button class="btn btn-secondary" id="nextMonth">→</button></div></div><div class="calendar" id="calendarGrid"></div></div>
+  <div class="card span-4"><div class="section-head"><div><h2>Add an event</h2><p>Plan something together.</p></div></div>
+    <form class="form" id="eventForm">
+      <div class="field full"><label>Event name</label><input name="title" placeholder="Family movie night" required></div>
+      <div class="field full"><label>Date</label><input name="date" type="date" required></div>
+      <div class="field full"><label>Time (optional)</label><input name="time" type="time"></div>
+      <div class="field full"><label>Who's invited?</label><select name="who"><option>Everyone</option><option>Parents</option><option>Kids</option></select></div>
+      <div class="form-actions"><button class="btn btn-primary">Add event</button></div>
+    </form>
+    <div class="section-head" style="margin-top:25px"><h2>Upcoming events</h2></div><div class="list" id="eventList"></div>
+  </div>
+</div></section>
 
-  <section id="page-rewards" class="page hidden">
-    <div class="grid">
-      <div class="card span-12">
-        <div class="section-head"><div><h2>Reward Center</h2><p>Earn points from chores and trade them for rewards.</p></div><span class="pill">YOUR FAMILY REWARDS</span></div>
-        <div class="grid" id="rewardCards"></div>
-      </div>
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Create a reward</h2><p>Parents can set rewards and point costs.</p></div></div>
-        <form class="form" id="rewardForm">
-          <div class="field full"><label>Reward name</label><input name="title" placeholder="Choose Friday's movie" required></div>
-          <div class="field"><label>Point cost</label><input name="cost" type="number" min="1" value="50" required></div>
-          <div class="field"><label>Available to</label><select name="who"><option>Everyone</option><option>Kids</option><option>Parents</option></select></div>
-          <div class="form-actions"><button class="btn btn-primary">Create reward</button></div>
-        </form>
-      </div>
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Redemption history</h2><p>Rewards claimed in this browser.</p></div></div>
-        <div class="list" id="redemptionList"></div>
-      </div>
-    </div>
-  </section>
+<section id="page-chores" class="page hidden"><div class="grid">
+  <div class="card span-7"><div class="section-head"><div><h2>Chores List</h2><p>Check off chores as you finish them.</p></div><span class="pill" id="choreCount">0 chores</span></div><div class="list" id="choreList"></div></div>
+  <div class="card span-5"><div class="section-head"><div><h2>Add a chore</h2><p>Set a task and its points.</p></div></div>
+    <form class="form" id="choreForm">
+      <div class="field full"><label>Chore name</label><input name="title" placeholder="Vacuum the living room" required></div>
+      <div class="field"><label>Assigned to</label><select name="assignee" class="memberOptions"></select></div>
+      <div class="field"><label>Points</label><input name="points" type="number" min="1" max="1000" value="10" required></div>
+      <div class="form-actions"><button class="btn btn-primary">Add chore</button></div>
+    </form><p class="subtitle">Completing a chore awards its points in this beta.</p>
+  </div>
+</div></section>
 
-  <section id="page-shopping" class="page hidden">
-    <div class="grid">
-      <div class="card span-7">
-        <div class="section-head"><div><h2>Shared Shopping List</h2><p>Everything your family needs to pick up.</p></div><span class="pill" id="shoppingCount">0 items</span></div>
-        <div class="list" id="shoppingList"></div>
-        <button class="btn btn-secondary" id="clearShopping" style="margin-top:15px">Remove checked items</button>
-      </div>
-      <div class="card span-5">
-        <div class="section-head"><div><h2>Add an item</h2><p>Keep the next shopping trip organized.</p></div></div>
-        <form class="form" id="shoppingForm">
-          <div class="field full"><label>Item</label><input name="title" placeholder="Milk, apples, bread..." required></div>
-          <div class="field"><label>Quantity</label><input name="qty" placeholder="e.g. 2"></div>
-          <div class="field"><label>Category</label><select name="category"><option>Groceries</option><option>Household</option><option>School</option><option>Other</option></select></div>
-          <div class="form-actions"><button class="btn btn-primary">Add to list</button></div>
-        </form>
-      </div>
-    </div>
-  </section>
+<section id="page-rewards" class="page hidden"><div class="grid">
+  <div class="card span-12"><div class="section-head"><div><h2>Reward Center</h2><p>Earn points from chores and trade them for rewards.</p></div><span class="pill">YOUR FAMILY REWARDS</span></div><div class="grid" id="rewardCards"></div></div>
+  <div class="card span-6"><div class="section-head"><div><h2>Create a reward</h2><p>Parents can set rewards and point costs.</p></div></div>
+    <form class="form" id="rewardForm">
+      <div class="field full"><label>Reward name</label><input name="title" placeholder="Choose Friday's movie" required></div>
+      <div class="field"><label>Point cost</label><input name="cost" type="number" min="1" value="50" required></div>
+      <div class="field"><label>Available to</label><select name="who"><option>Everyone</option><option>Kids</option><option>Parents</option></select></div>
+      <div class="form-actions"><button class="btn btn-primary">Create reward</button></div>
+    </form>
+  </div>
+  <div class="card span-6"><div class="section-head"><div><h2>Redemption history</h2><p>Rewards claimed in this browser.</p></div></div><div class="list" id="redemptionList"></div></div>
+</div></section>
 
-  <section id="page-votes" class="page hidden">
-    <div class="grid">
-      <div class="card span-7">
-        <div class="section-head"><div><h2>Family Votes</h2><p>Make family decisions together.</p></div></div>
-        <div class="list" id="voteList"></div>
-      </div>
-      <div class="card span-5">
-        <div class="section-head"><div><h2>Create a vote</h2><p>Let everyone choose their favorite.</p></div></div>
-        <form class="form" id="voteForm">
-          <div class="field full"><label>Question</label><input name="title" placeholder="What should we do Saturday?" required></div>
-          <div class="field full"><label>Options (separate with commas)</label><textarea name="options" rows="3" placeholder="Go bowling, Have a movie night, Go hiking" required></textarea></div>
-          <div class="form-actions"><button class="btn btn-primary">Create vote</button></div>
-        </form>
-      </div>
-    </div>
-  </section>
+<section id="page-shopping" class="page hidden"><div class="grid">
+  <div class="card span-7"><div class="section-head"><div><h2>Shared Shopping List</h2><p>Everything your family needs to pick up.</p></div><span class="pill" id="shoppingCount">0 items</span></div><div class="list" id="shoppingList"></div><button class="btn btn-secondary" id="clearShopping" style="margin-top:15px">Remove checked items</button></div>
+  <div class="card span-5"><div class="section-head"><div><h2>Add an item</h2><p>Keep the next shopping trip organized.</p></div></div>
+    <form class="form" id="shoppingForm">
+      <div class="field full"><label>Item</label><input name="title" placeholder="Milk, apples, bread..." required></div>
+      <div class="field"><label>Quantity</label><input name="qty" placeholder="e.g. 2"></div>
+      <div class="field"><label>Category</label><select name="category"><option>Groceries</option><option>Household</option><option>School</option><option>Other</option></select></div>
+      <div class="form-actions"><button class="btn btn-primary">Add to list</button></div>
+    </form>
+  </div>
+</div></section>
 
-  <section id="page-chat" class="page hidden">
-    <div class="grid">
-      <div class="card span-8">
-        <div class="section-head"><div><h2>Family Chat</h2><p>A place for family messages.</p></div><span class="pill">BETA</span></div>
-        <div class="chat-box" id="chatMessages"></div>
-        <form id="chatForm" style="display:flex;gap:8px">
-          <input name="message" placeholder="Write a message..." maxlength="500" required>
-          <button class="btn btn-primary">Send</button>
-        </form>
-      </div>
-      <div class="card span-4">
-        <h2 style="font-size:15px">Family chat guidelines</h2>
-        <p class="subtitle" style="line-height:1.8">Be kind to everyone. Keep messages respectful. Important family plans can go on the shared calendar.</p>
-        <div class="notice" style="margin-top:20px">Beta note: messages are stored only in this browser. They are not delivered to other family members yet.</div>
-      </div>
-    </div>
-  </section>
+<section id="page-votes" class="page hidden"><div class="grid">
+  <div class="card span-7"><div class="section-head"><div><h2>Family Votes</h2><p>Make family decisions together.</p></div></div><div class="list" id="voteList"></div></div>
+  <div class="card span-5"><div class="section-head"><div><h2>Create a vote</h2><p>Let everyone choose their favorite.</p></div></div>
+    <form class="form" id="voteForm">
+      <div class="field full"><label>Question</label><input name="title" placeholder="What should we do Saturday?" required></div>
+      <div class="field full"><label>Options (separate with commas)</label><textarea name="options" rows="3" placeholder="Go bowling, Have a movie night, Go hiking" required></textarea></div>
+      <div class="form-actions"><button class="btn btn-primary">Create vote</button></div>
+    </form>
+  </div>
+</div></section>
 
-  <section id="page-roster" class="page hidden">
-    <div class="grid">
-      <div class="card span-7">
-        <div class="section-head"><div><h2>Family Roster</h2><p>Your household, all in one place.</p></div><span class="pill" id="memberCount">0 members</span></div>
-        <div id="rosterList"></div>
-      </div>
-      <div class="card span-5">
-        <div class="section-head"><div><h2>Add a family member</h2><p>Manage your beta family roster.</p></div></div>
-        <form class="form" id="memberForm">
-          <div class="field full"><label>Display name</label><input name="name" placeholder="Family member's name" required></div>
-          <div class="field full"><label>Role</label><select name="role"><option>Member</option><option>Parent</option></select></div>
-          <div class="form-actions"><button class="btn btn-primary">Add member</button></div>
-        </form>
-        <p class="subtitle">These are local demo profiles, not login accounts.</p>
-      </div>
-    </div>
-  </section>
+<section id="page-chat" class="page hidden"><div class="grid">
+  <div class="card span-8"><div class="section-head"><div><h2>Family Chat</h2><p>A place for family messages.</p></div><span class="pill">BETA</span></div><div class="chat-box" id="chatMessages"></div>
+    <form id="chatForm" style="display:flex;gap:8px"><input name="message" placeholder="Write a message..." maxlength="500" required><button class="btn btn-primary">Send</button></form>
+  </div>
+  <div class="card span-4"><h2 style="font-size:15px">Family chat guidelines</h2><p class="subtitle" style="line-height:1.8">Be kind to everyone. Keep messages respectful. Important family plans can go on the shared calendar.</p><div class="notice" style="margin-top:20px">Beta note: messages are stored only in this browser. They are not delivered to other family members yet.</div></div>
+</div></section>
 
-  <section id="page-settings" class="page hidden">
-    <div class="grid">
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Family Rules</h2><p>Keep household expectations clear.</p></div></div>
-        <div id="rulesList"></div>
-        <form id="ruleForm" style="display:flex;gap:8px;margin-top:15px">
-          <input name="rule" placeholder="Add a family rule..." required>
-          <button class="btn btn-primary">Add</button>
-        </form>
-      </div>
-      <div class="card span-6">
-        <div class="section-head"><div><h2>Family Settings</h2><p>Customize this beta experience.</p></div></div>
-        <form id="settingsForm" class="form">
-          <div class="field full"><label>Family name</label><input id="familyName" name="familyName" placeholder="Our Family"></div>
-          <div class="field full"><label>Points name</label><input id="pointsName" name="pointsName" placeholder="Points"></div>
-          <div class="field full"><label>Default view</label><select id="defaultView" name="defaultView"><option>Parent</option><option>Member</option></select></div>
-          <div class="form-actions"><button class="btn btn-primary">Save settings</button></div>
-        </form>
-        <div style="border-top:1px solid var(--border);margin-top:25px;padding-top:20px">
-          <h3 style="font-size:13px">Beta data</h3>
-          <p class="subtitle">Reset this browser's FamSync demo data to the original sample.</p>
-          <button class="btn btn-secondary" id="resetData">Reset demo data</button>
-        </div>
-      </div>
-    </div>
-  </section>
+<section id="page-roster" class="page hidden"><div class="grid">
+  <div class="card span-7"><div class="section-head"><div><h2>Family Roster</h2><p>Your household, all in one place.</p></div><span class="pill" id="memberCount">0 members</span></div><div id="rosterList"></div></div>
+  <div class="card span-5"><div class="section-head"><div><h2>Add a family member</h2><p>Manage your beta family roster.</p></div></div>
+    <form class="form" id="memberForm">
+      <div class="field full"><label>Display name</label><input name="name" placeholder="Family member's name" required></div>
+      <div class="field full"><label>Role</label><select name="role"><option>Member</option><option>Parent</option></select></div>
+      <div class="form-actions"><button class="btn btn-primary">Add member</button></div>
+    </form><p class="subtitle">These are local demo profiles, not login accounts.</p>
+  </div>
+</div></section>
 
-  <div class="footer">FAMSYNC · FAMILY LIFE, IN SYNC · BETA</div>
+<section id="page-settings" class="page hidden"><div class="grid">
+  <div class="card span-6"><div class="section-head"><div><h2>Family Rules</h2><p>Keep household expectations clear.</p></div></div><div id="rulesList"></div>
+    <form id="ruleForm" style="display:flex;gap:8px;margin-top:15px"><input name="rule" placeholder="Add a family rule..." required><button class="btn btn-primary">Add</button></form>
+  </div>
+  <div class="card span-6"><div class="section-head"><div><h2>Family Settings</h2><p>Customize this beta experience.</p></div></div>
+    <form id="settingsForm" class="form">
+      <div class="field full"><label>Family name</label><input id="familyName" name="familyName" placeholder="Our Family"></div>
+      <div class="field full"><label>Points name</label><input id="pointsName" name="pointsName" placeholder="Points"></div>
+      <div class="field full"><label>Default view</label><select id="defaultView" name="defaultView"><option>Parent</option><option>Member</option></select></div>
+      <div class="form-actions"><button class="btn btn-primary">Save settings</button></div>
+    </form>
+    <div style="border-top:1px solid var(--border);margin-top:25px;padding-top:20px"><h3 style="font-size:13px">Beta data</h3><p class="subtitle">Reset this browser's FamSync demo data to the original sample.</p><button class="btn btn-secondary" id="resetData">Reset demo data</button></div>
+  </div>
+</div></section>
+
+<div class="footer">FAMSYNC · FAMILY LIFE, IN SYNC · BETA</div>
 </main>
 </div>
 
 <script>
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const today = new Date();
-const dateString = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-const uid = () => Math.random().toString(36).slice(2,10);
-const initialData = () => ({
-  familyName:"Our Family",pointsName:"Points",view:"Parent",currentUser:"Alex",
-  calendarMonth: new Date(today.getFullYear(),today.getMonth(),1).toISOString(),
-  members:[
-    {id:"m1",name:"Mom",role:"Parent",points:0},
-    {id:"m2",name:"Dad",role:"Parent",points:0},
-    {id:"m3",name:"Alex",role:"Member",points:0},
-    {id:"m4",name:"Sam",role:"Member",points:0}
-  ],
-  chores:[
-    {id:"c1",title:"Make the bed",assignee:"m3",points:10,done:false},
-    {id:"c2",title:"Feed the pets",assignee:"m4",points:15,done:false},
-    {id:"c3",title:"Load the dishwasher",assignee:"m3",points:20,done:false}
-  ],
-  rewards:[
-    {id:"r1",title:"Choose movie night",cost:50,who:"Everyone"},
-    {id:"r2",title:"Pick a family dessert",cost:35,who:"Everyone"},
-    {id:"r3",title:"Extra game time",cost:100,who:"Kids"}
-  ],
-  redemptions:[],
-  events:[],
-  shopping:[
-    {id:"s1",title:"Milk",qty:"1",category:"Groceries",done:false},
-    {id:"s2",title:"Apples",qty:"6",category:"Groceries",done:false}
-  ],
-  votes:[
-    {id:"v1",title:"What should we do this weekend?",options:["Movie night","Bowling","Picnic"],votes:{}}
-  ],
-  messages:[],
-  rules:["Treat each other with respect","Finish chores before screen time","Help keep shared spaces tidy"],
-  settings:{}
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const today=new Date();
+const dateString=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const uid=()=>Math.random().toString(36).slice(2,10);
+const initialData=()=>({
+ familyName:"Our Family",pointsName:"Points",view:"Parent",currentUser:"Alex",
+ calendarMonth:new Date(today.getFullYear(),today.getMonth(),1).toISOString(),
+ members:[{id:"m1",name:"Mom",role:"Parent",points:0},{id:"m2",name:"Dad",role:"Parent",points:0},{id:"m3",name:"Alex",role:"Member",points:0},{id:"m4",name:"Sam",role:"Member",points:0}],
+ chores:[{id:"c1",title:"Make the bed",assignee:"m3",points:10,done:false},{id:"c2",title:"Feed the pets",assignee:"m4",points:15,done:false},{id:"c3",title:"Load the dishwasher",assignee:"m3",points:20,done:false}],
+ rewards:[{id:"r1",title:"Choose movie night",cost:50,who:"Everyone"},{id:"r2",title:"Pick a family dessert",cost:35,who:"Everyone"},{id:"r3",title:"Extra game time",cost:100,who:"Kids"}],
+ redemptions:[],events:[],shopping:[{id:"s1",title:"Milk",qty:"1",category:"Groceries",done:false},{id:"s2",title:"Apples",qty:"6",category:"Groceries",done:false}],
+ votes:[{id:"v1",title:"What should we do this weekend?",options:["Movie night","Bowling","Picnic"],votes:{}}],messages:[],
+ rules:["Treat each other with respect","Finish chores before screen time","Help keep shared spaces tidy"],settings:{}
 });
 let data;
-try {
-  const saved = localStorage.getItem("famsync-beta-v1");
-  data = saved ? {...initialData(),...JSON.parse(saved)} : initialData();
-} catch(e) { data = initialData(); }
-let activePage = "dashboard";
-let calendarMonth = new Date(data.calendarMonth || dateString(today));
+try{const saved=localStorage.getItem("famsync-beta-v1");data=saved?{...initialData(),...JSON.parse(saved)}:initialData()}catch(e){data=initialData()}
+let activePage="dashboard";
+let calendarMonth=new Date(data.calendarMonth||dateString(today));
 let noticeTimer;
-
-function save() {
-  try { localStorage.setItem("famsync-beta-v1",JSON.stringify(data)); }
-  catch(e) { alert("Your browser could not save the changes."); }
+function save(){try{localStorage.setItem("famsync-beta-v1",JSON.stringify(data))}catch(e){alert("Your browser could not save the changes.")}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function member(id){return data.members.find(m=>m.id===id)}
+function currentMember(){return data.members.find(m=>m.name===data.currentUser)||data.members[0]}
+function isParent(){return data.view==="Parent"}
+function points(){return currentMember()?.points||0}
+function initials(name){return(name||"?").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
+function empty(msg){return`<div class="empty">${esc(msg)}</div>`}
+function safeDate(s){if(!s)return null;const d=new Date(s+"T12:00:00");return Number.isNaN(d.getTime())?null:d}
+function prettyDate(s){const d=safeDate(s);return d?d.toLocaleDateString(undefined,{month:"short",day:"numeric"}):"No date"}
+function toast(message){
+ let el=$("#toast");if(!el){el=document.createElement("div");el.id="toast";el.style.cssText="position:fixed;bottom:22px;right:22px;background:#302b4c;color:white;padding:13px 18px;border:1px solid #514477;border-radius:12px;z-index:20;font-size:13px;box-shadow:0 8px 35px #0006";document.body.appendChild(el)}
+ el.textContent=message;el.classList.remove("hidden");clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>el.classList.add("hidden"),2400)
 }
-function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function member(id) { return data.members.find(m=>m.id===id); }
-function currentMember() {
-  return data.members.find(m=>m.name===data.currentUser) || data.members[0];
-}
-function isParent() { return data.view==="Parent"; }
-function points() { return currentMember()?.points || 0; }
-function initials(name) { return (name||"?").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase(); }
-function empty(msg) { return `<div class="empty">${esc(msg)}</div>`; }
-function safeDate(s) {
-  if(!s) return null;
-  const d = new Date(s+"T12:00:00");
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-function prettyDate(s) {
-  const d=safeDate(s);
-  return d ? d.toLocaleDateString(undefined,{month:"short",day:"numeric"}) : "No date";
-}
-function toast(message) {
-  let el=$("#toast");
-  if(!el) {
-    el=document.createElement("div");el.id="toast";
-    el.style.cssText="position:fixed;bottom:22px;right:22px;background:#302b4c;color:white;padding:13px 18px;border:1px solid #514477;border-radius:12px;z-index:20;font-size:13px;box-shadow:0 8px 35px #0006";
-    document.body.appendChild(el);
-  }
-  el.textContent=message;el.classList.remove("hidden");
-  clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>el.classList.add("hidden"),2400);
-}
-const titles = {
+const titles={
  dashboard:["YOUR FAMILY WORKSPACE","Family Dashboard","Everything your family needs, all in one place."],
  calendar:["PLAN TOGETHER","Family Calendar","Keep birthdays, plans, and family events organized."],
  chores:["EVERY LITTLE THING COUNTS","Chores List","Complete tasks, earn points, and help out."],
@@ -479,395 +314,188 @@ const titles = {
  roster:["MEET THE HOUSEHOLD","Family Roster","The people who make your family yours."],
  settings:["MAKE IT YOURS","Family Rules & Settings","Set up your family's space."]
 };
-function go(page) {
-  if(!titles[page]) return;
-  activePage=page;
-  $$(".page").forEach(p=>p.classList.add("hidden"));
-  $("#page-"+page).classList.remove("hidden");
-  $$("#navigation button,[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
-  const t=titles[page];
-  $("#pageEyebrow").textContent=t[0];$("#pageTitle").textContent=t[1];$("#pageSubtitle").textContent=t[2];
-  render();
-  window.scrollTo({top:0,behavior:"smooth"});
+function go(page){
+ if(!titles[page])return;activePage=page;$$(".page").forEach(p=>p.classList.add("hidden"));$("#page-"+page).classList.remove("hidden");
+ $$("#navigation button,[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ const t=titles[page];$("#pageEyebrow").textContent=t[0];$("#pageTitle").textContent=t[1];$("#pageSubtitle").textContent=t[2];render();window.scrollTo({top:0,behavior:"smooth"})
 }
-function renderMemberOptions() {
-  $$(".memberOptions").forEach(select=>{
-    const previous=select.value;
-    select.innerHTML=data.members.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");
-    if(data.members.some(m=>m.id===previous)) select.value=previous;
-  });
+function renderMemberOptions(){
+ $$(".memberOptions").forEach(select=>{const previous=select.value;select.innerHTML=data.members.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");if(data.members.some(m=>m.id===previous))select.value=previous})
 }
-function renderHeader() {
-  $("#viewLabel").textContent=data.view+" View";
-  $("#topAvatar").textContent=initials(currentMember()?.name||"F");
-  $("#topAvatar").title=currentMember()?.name||"Family";
+function renderHeader(){$("#viewLabel").textContent=data.view+" View";$("#topAvatar").textContent=initials(currentMember()?.name||"F");$("#topAvatar").title=currentMember()?.name||"Family"}
+function renderDashboard(){
+ $("#statChores").textContent=`${data.chores.filter(c=>c.done).length}/${data.chores.length}`;
+ $("#statPoints").textContent=data.members.reduce((sum,m)=>sum+m.points,0);
+ $("#statEvents").textContent=data.events.filter(e=>e.date>=dateString(today)).length;
+ $("#statShopping").textContent=data.shopping.filter(s=>!s.done).length;
+ $("#dashboardChores").innerHTML=data.chores.filter(c=>!c.done).slice(0,4).map(c=>`<div class="item"><input class="check" type="checkbox" data-chore="${c.id}"><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")}</div></div><span class="pill">+${c.points}</span></div>`).join("")||empty("All caught up! No unfinished chores.");
+ $("#dashboardEvents").innerHTML=data.events.filter(e=>e.date>=dateString(today)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(e=>`<div class="item"><div class="member-avatar">▦</div><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""}</div></div></div>`).join("")||empty("No upcoming events yet.");
+ $("#dashboardRewards").innerHTML=data.rewards.slice(0,3).map(r=>`<div class="item"><div class="member-avatar">✧</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${r.cost} ${esc(data.pointsName)}</div></div></div>`).join("")||empty("No rewards yet.");
+ $("#dashboardVotes").innerHTML=data.votes.slice(0,2).map(v=>`<div class="item"><div class="item-main"><div class="item-title">${esc(v.title)}</div><div class="item-sub">${v.options.length} options</div></div><button class="btn btn-secondary" data-go="votes">Vote</button></div>`).join("")||empty("No family votes yet.")
 }
-function renderDashboard() {
-  $("#statChores").textContent=`${data.chores.filter(c=>c.done).length}/${data.chores.length}`;
-  $("#statPoints").textContent=data.members.reduce((sum,m)=>sum+m.points,0);
-  $("#statEvents").textContent=data.events.filter(e=>e.date>=dateString(today)).length;
-  $("#statShopping").textContent=data.shopping.filter(s=>!s.done).length;
-  $("#dashboardChores").innerHTML=data.chores.filter(c=>!c.done).slice(0,4).map(c=>`
-    <div class="item"><input class="check" type="checkbox" data-chore="${c.id}">
-    <div class="item-main"><div class="item-title">${esc(c.title)}</div>
-    <div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")}</div></div><span class="pill">+${c.points}</span></div>`).join("")||empty("All caught up! No unfinished chores.");
-  $("#dashboardEvents").innerHTML=data.events.filter(e=>e.date>=dateString(today)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(e=>`
-    <div class="item"><div class="member-avatar">▦</div><div class="item-main"><div class="item-title">${esc(e.title)}</div>
-    <div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""}</div></div></div>`).join("")||empty("No upcoming events yet.");
-  $("#dashboardRewards").innerHTML=data.rewards.slice(0,3).map(r=>`
-    <div class="item"><div class="member-avatar">✧</div><div class="item-main"><div class="item-title">${esc(r.title)}</div>
-    <div class="item-sub">${r.cost} ${esc(data.pointsName)}</div></div></div>`).join("")||empty("No rewards yet.");
-  $("#dashboardVotes").innerHTML=data.votes.slice(0,2).map(v=>`
-    <div class="item"><div class="item-main"><div class="item-title">${esc(v.title)}</div>
-    <div class="item-sub">${v.options.length} options</div></div><button class="btn btn-secondary" data-go="votes">Vote</button></div>`).join("")||empty("No family votes yet.");
+function renderChores(){
+ const list=isParent()?data.chores:data.chores.filter(c=>c.assignee===currentMember()?.id);
+ $("#choreCount").textContent=`${list.filter(c=>c.done).length}/${list.length} done`;
+ $("#choreList").innerHTML=list.map(c=>`<div class="item ${c.done?"done":""}"><input class="check" type="checkbox" data-chore="${c.id}" ${c.done?"checked":""}><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")} · ${c.points} points</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-chore="${c.id}">×</button>`:""}</div>`).join("")||empty("No chores assigned here.")
 }
-function renderChores() {
-  const list=isParent()?data.chores:data.chores.filter(c=>c.assignee===currentMember()?.id);
-  $("#choreCount").textContent=`${list.filter(c=>c.done).length}/${list.length} done`;
-  $("#choreList").innerHTML=list.map(c=>`
-    <div class="item ${c.done?"done":""}">
-      <input class="check" type="checkbox" data-chore="${c.id}" ${c.done?"checked":""}>
-      <div class="item-main"><div class="item-title">${esc(c.title)}</div>
-      <div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")} · ${c.points} points</div></div>
-      ${isParent()?`<button class="btn btn-secondary" data-delete-chore="${c.id}">×</button>`:""}
-    </div>`).join("")||empty("No chores assigned here.");
+function renderCalendar(){
+ const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth();$("#calendarMonth").textContent=calendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+ const start=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();
+ let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="day-name">${d}</div>`).join("");for(let i=0;i<start;i++)html+="<div></div>";
+ for(let d=1;d<=count;d++){const ds=dateString(new Date(y,m,d));const events=data.events.filter(e=>e.date===ds);html+=`<div class="day ${ds===dateString(today)?"today":""}">${d}${events.map(e=>`<div class="day-event" title="${esc(e.title)}">${esc(e.title)}</div>`).join("")}</div>`}
+ $("#calendarGrid").innerHTML=html;
+ $("#eventList").innerHTML=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>`<div class="item"><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""} · ${esc(e.who)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-event="${e.id}">×</button>`:""}</div>`).join("")||empty("No events yet.")
 }
-function renderCalendar() {
-  const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth();
-  $("#calendarMonth").textContent=calendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
-  const start=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();
-  let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="day-name">${d}</div>`).join("");
-  for(let i=0;i<start;i++) html+='<div></div>';
-  for(let d=1;d<=count;d++) {
-    const ds=dateString(new Date(y,m,d));
-    const events=data.events.filter(e=>e.date===ds);
-    html+=`<div class="day ${ds===dateString(today)?"today":""}">${d}${events.map(e=>`<div class="day-event" title="${esc(e.title)}">${esc(e.title)}</div>`).join("")}</div>`;
-  }
-  $("#calendarGrid").innerHTML=html;
-  $("#eventList").innerHTML=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>`
-    <div class="item"><div class="item-main"><div class="item-title">${esc(e.title)}</div>
-    <div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""} · ${esc(e.who)}</div></div>
-    ${isParent()?`<button class="btn btn-secondary" data-delete-event="${e.id}">×</button>`:""}</div>`).join("")||empty("No events yet.");
+function renderRewards(){
+ $("#rewardCards").innerHTML=data.rewards.map(r=>`<div class="card span-4" style="background:var(--panel2)"><div class="stat-icon">✧</div><div class="eyebrow">REWARD</div><h3 style="font-size:16px;margin:14px 0 8px">${esc(r.title)}</h3><div class="stat-value" style="font-size:23px">${r.cost} <span style="font-size:12px;color:var(--muted)">${esc(data.pointsName)}</span></div><p class="subtitle">${esc(r.who)}</p><button class="btn btn-primary" data-redeem="${r.id}" style="margin-top:12px;width:100%">Redeem reward</button>${isParent()?`<button class="btn btn-secondary" data-delete-reward="${r.id}" style="margin-top:7px;width:100%">Remove reward</button>`:""}</div>`).join("")||empty("No rewards created yet.");
+ $("#redemptionList").innerHTML=data.redemptions.slice().reverse().map(r=>`<div class="item"><div class="member-avatar">✓</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${esc(r.name)} · ${r.cost} points</div></div></div>`).join("")||empty("No rewards redeemed yet.")
 }
-function renderRewards() {
-  $("#rewardCards").innerHTML=data.rewards.map(r=>`
-    <div class="card span-4" style="background:var(--panel2)">
-      <div class="stat-icon">✧</div><div class="eyebrow">REWARD</div>
-      <h3 style="font-size:16px;margin:14px 0 8px">${esc(r.title)}</h3>
-      <div class="stat-value" style="font-size:23px">${r.cost} <span style="font-size:12px;color:var(--muted)">${esc(data.pointsName)}</span></div>
-      <p class="subtitle">${esc(r.who)}</p>
-      <button class="btn btn-primary" data-redeem="${r.id}" style="margin-top:12px;width:100%">Redeem reward</button>
-      ${isParent()?`<button class="btn btn-secondary" data-delete-reward="${r.id}" style="margin-top:7px;width:100%">Remove reward</button>`:""}
-    </div>`).join("")||empty("No rewards created yet.");
-  $("#redemptionList").innerHTML=data.redemptions.slice().reverse().map(r=>`
-    <div class="item"><div class="member-avatar">✓</div><div class="item-main">
-    <div class="item-title">${esc(r.title)}</div><div class="item-sub">${esc(r.name)} · ${r.cost} points</div></div></div>`).join("")||empty("No rewards redeemed yet.");
+function renderShopping(){
+ $("#shoppingCount").textContent=`${data.shopping.filter(s=>!s.done).length} left`;
+ $("#shoppingList").innerHTML=data.shopping.map(s=>`<div class="item ${s.done?"done":""}"><input class="check" type="checkbox" data-shopping="${s.id}" ${s.done?"checked":""}><div class="item-main"><div class="item-title">${esc(s.title)}</div><div class="item-sub">${s.qty?esc(s.qty)+" · ":""}${esc(s.category)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-shopping="${s.id}">×</button>`:""}</div>`).join("")||empty("Your shopping list is empty.")
 }
-function renderShopping() {
-  const list=isParent()?data.shopping:data.shopping;
-  $("#shoppingCount").textContent=`${list.filter(s=>!s.done).length} left`;
-  $("#shoppingList").innerHTML=list.map(s=>`
-    <div class="item ${s.done?"done":""}"><input class="check" type="checkbox" data-shopping="${s.id}" ${s.done?"checked":""}>
-    <div class="item-main"><div class="item-title">${esc(s.title)}</div>
-    <div class="item-sub">${s.qty?esc(s.qty)+" · ":""}${esc(s.category)}</div></div>
-    ${isParent()?`<button class="btn btn-secondary" data-delete-shopping="${s.id}">×</button>`:""}</div>`).join("")||empty("Your shopping list is empty.");
+function renderVotes(){
+ $("#voteList").innerHTML=data.votes.map(v=>{
+  const total=Object.keys(v.votes).length,mine=v.votes[currentMember()?.id];
+  const counts=v.options.map((o,i)=>({o,i,n:Object.values(v.votes).filter(x=>x===i).length}));
+  return`<div class="card" style="padding:15px;margin-bottom:12px"><div class="section-head"><div><h2>${esc(v.title)}</h2><p>${total} vote${total===1?"":"s"} recorded</p></div>${isParent()?`<button class="btn btn-secondary" data-delete-vote="${v.id}">×</button>`:""}</div>${counts.map(c=>`<div class="vote-option"><div style="flex:1;min-width:0">${esc(c.o)}<div class="vote-bar"><div style="width:${total?c.n/total*100:0}%"></div></div></div><span>${c.n}</span><button class="btn ${mine===c.i?"btn-primary":"btn-secondary"}" data-cast-vote="${v.id}" data-option="${c.i}">${mine===c.i?"Voted":"Vote"}</button></div>`).join("")}</div>`
+ }).join("")||empty("No active votes. Create the first one!")
 }
-function renderVotes() {
-  $("#voteList").innerHTML=data.votes.map(v=>{
-    const total=Object.keys(v.votes).length;
-    const mine=v.votes[currentMember()?.id];
-    const counts=v.options.map((o,i)=>({o,i,n:Object.values(v.votes).filter(x=>x===i).length}));
-    return `<div class="card" style="padding:15px;margin-bottom:12px">
-      <div class="section-head"><div><h2>${esc(v.title)}</h2><p>${total} vote${total===1?"":"s"} recorded</p></div>
-      ${isParent()?`<button class="btn btn-secondary" data-delete-vote="${v.id}">×</button>`:""}</div>
-      ${counts.map(c=>`<div class="vote-option"><div style="flex:1;min-width:0">${esc(c.o)}
-      <div class="vote-bar"><div style="width:${total?c.n/total*100:0}%"></div></div></div>
-      <span>${c.n}</span><button class="btn ${mine===c.i?"btn-primary":"btn-secondary"}" data-cast-vote="${v.id}" data-option="${c.i}">${mine===c.i?"Voted":"Vote"}</button></div>`).join("")}
-    </div>`;
-  }).join("")||empty("No active votes. Create the first one!");
+function renderRoster(){
+ $("#memberCount").textContent=`${data.members.length} members`;
+ $("#rosterList").innerHTML=data.members.map(m=>`<div class="member"><div class="member-avatar">${esc(initials(m.name))}</div><div class="member-info"><div class="member-name">${esc(m.name)} ${m.name===data.currentUser?'<span class="badge">Current view</span>':""}</div><div class="member-role">${esc(m.role)} · ${m.points} ${esc(data.pointsName)}</div></div>${isParent()&&data.members.length>1?`<button class="btn btn-secondary" data-remove-member="${m.id}">Remove</button>`:""}${m.name!==data.currentUser?`<button class="btn btn-secondary" data-become="${m.id}">View as</button>`:""}</div>`).join("")
 }
-function renderRoster() {
-  $("#memberCount").textContent=`${data.members.length} members`;
-  $("#rosterList").innerHTML=data.members.map(m=>`
-    <div class="member"><div class="member-avatar">${esc(initials(m.name))}</div>
-    <div class="member-info"><div class="member-name">${esc(m.name)} ${m.name===data.currentUser?'<span class="badge">Current view</span>':""}</div>
-    <div class="member-role">${esc(m.role)} · ${m.points} ${esc(data.pointsName)}</div></div>
-    ${isParent()&&data.members.length>1?`<button class="btn btn-secondary" data-remove-member="${m.id}">Remove</button>`:""}
-    ${m.name!==data.currentUser?`<button class="btn btn-secondary" data-become="${m.id}">View as</button>`:""}
-    </div>`).join("");
+function renderRules(){
+ $("#rulesList").innerHTML=data.rules.map((r,i)=>`<div class="rule"><span>✦ ${esc(r)}</span>${isParent()?`<button class="btn btn-secondary" data-delete-rule="${i}">×</button>`:""}</div>`).join("")||empty("No family rules added.");
+ $("#familyName").value=data.familyName;$("#pointsName").value=data.pointsName;$("#defaultView").value=data.settings.defaultView||"Parent"
 }
-function renderRules() {
-  $("#rulesList").innerHTML=data.rules.map((r,i)=>`<div class="rule"><span>✦ ${esc(r)}</span>
-  ${isParent()?`<button class="btn btn-secondary" data-delete-rule="${i}">×</button>`:""}</div>`).join("")||empty("No family rules added.");
-  $("#familyName").value=data.familyName;
-  $("#pointsName").value=data.pointsName;
-  $("#defaultView").value=data.settings.defaultView||"Parent";
+function renderChat(){
+ $("#chatMessages").innerHTML=data.messages.map(m=>`<div class="chat-msg ${m.name===currentMember()?.name?"mine":""}"><div class="chat-author">${esc(m.name)}</div><div class="chat-text">${esc(m.text)}</div><div class="chat-time">${esc(m.time)}</div></div>`).join("")||empty("No messages yet. Say hello to your family!");
+ $("#chatMessages").scrollTop=$("#chatMessages").scrollHeight
 }
-function renderChat() {
-  $("#chatMessages").innerHTML=data.messages.map(m=>`
-    <div class="chat-msg ${m.name===currentMember()?.name?"mine":""}">
-      <div class="chat-author">${esc(m.name)}</div><div class="chat-text">${esc(m.text)}</div>
-      <div class="chat-time">${esc(m.time)}</div>
-    </div>`).join("")||empty("No messages yet. Say hello to your family!");
-  $("#chatMessages").scrollTop=$("#chatMessages").scrollHeight;
-}
-function render() {
-  renderMemberOptions();renderHeader();renderDashboard();renderChores();renderCalendar();
-  renderRewards();renderShopping();renderVotes();renderRoster();renderRules();renderChat();
-}
-$("#navigation").addEventListener("click",e=>{
-  const b=e.target.closest("[data-page]");if(b)go(b.dataset.page);
-});
+function render(){renderMemberOptions();renderHeader();renderDashboard();renderChores();renderCalendar();renderRewards();renderShopping();renderVotes();renderRoster();renderRules();renderChat()}
+
+$("#navigation").addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(b)go(b.dataset.page)});
 $$("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
 document.addEventListener("click",e=>{
-  const goBtn=e.target.closest("[data-go]");if(goBtn)go(goBtn.dataset.go);
-  const del=e.target.closest("[data-delete-chore]");
-  if(del){data.chores=data.chores.filter(c=>c.id!==del.dataset.deleteChore);save();render();toast("Chore removed.");}
-  const de=e.target.closest("[data-delete-event]");
-  if(de){data.events=data.events.filter(x=>x.id!==de.dataset.deleteEvent);save();render();toast("Event removed.");}
-  const dr=e.target.closest("[data-delete-reward]");
-  if(dr){data.rewards=data.rewards.filter(x=>x.id!==dr.dataset.deleteReward);save();render();toast("Reward removed.");}
-  const ds=e.target.closest("[data-delete-shopping]");
-  if(ds){data.shopping=data.shopping.filter(x=>x.id!==ds.dataset.deleteShopping);save();render();toast("Item removed.");}
-  const dv=e.target.closest("[data-delete-vote]");
-  if(dv){data.votes=data.votes.filter(x=>x.id!==dv.dataset.deleteVote);save();render();toast("Vote removed.");}
-  const rule=e.target.closest("[data-delete-rule]");
-  if(rule){data.rules.splice(Number(rule.dataset.deleteRule),1);save();render();toast("Rule removed.");}
-  const rem=e.target.closest("[data-remove-member]");
-  if(rem){
-    const m=member(rem.dataset.removeMember);
-    if(m&&confirm("Remove "+m.name+" from this demo roster?")){
-      data.members=data.members.filter(x=>x.id!==m.id);
-      data.chores.forEach(c=>{if(c.assignee===m.id)c.assignee=data.members[0]?.id||"";});
-      if(data.currentUser===m.name)data.currentUser=data.members[0]?.name||"Family";
-      save();render();toast("Member removed.");
-    }
-  }
-  const become=e.target.closest("[data-become]");
-  if(become){const m=member(become.dataset.become);if(m){data.currentUser=m.name;data.view=m.role==="Parent"?"Parent":"Member";save();render();toast("Viewing as "+m.name);}}
-  const redeem=e.target.closest("[data-redeem]");
-  if(redeem){
-    const r=data.rewards.find(x=>x.id===redeem.dataset.redeem);
-    const m=currentMember();
-    if(!r||!m)return;
-    if(r.who==="Kids"&&m.role==="Parent"){toast("This reward is for kids.");return;}
-    if(r.who==="Parents"&&m.role!=="Parent"){toast("This reward is for parents.");return;}
-    if(m.points<r.cost){toast("Not enough points yet!");return;}
-    if(confirm(`Redeem "${r.title}" for ${r.cost} points?`)){
-      m.points-=r.cost;data.redemptions.push({title:r.title,cost:r.cost,name:m.name});
-      save();render();toast("Reward redeemed!");
-    }
-  }
-  const cast=e.target.closest("[data-cast-vote]");
-  if(cast){
-    const v=data.votes.find(x=>x.id===cast.dataset.castVote);
-    if(v){v.votes[currentMember().id]=Number(cast.dataset.option);save();render();toast("Your vote is counted!");}
-  }
+ const goBtn=e.target.closest("[data-go]");if(goBtn)go(goBtn.dataset.go);
+ const del=e.target.closest("[data-delete-chore]");if(del){data.chores=data.chores.filter(c=>c.id!==del.dataset.deleteChore);save();render();toast("Chore removed.")}
+ const de=e.target.closest("[data-delete-event]");if(de){data.events=data.events.filter(x=>x.id!==de.dataset.deleteEvent);save();render();toast("Event removed.")}
+ const dr=e.target.closest("[data-delete-reward]");if(dr){data.rewards=data.rewards.filter(x=>x.id!==dr.dataset.deleteReward);save();render();toast("Reward removed.")}
+ const ds=e.target.closest("[data-delete-shopping]");if(ds){data.shopping=data.shopping.filter(x=>x.id!==ds.dataset.deleteShopping);save();render();toast("Item removed.")}
+ const dv=e.target.closest("[data-delete-vote]");if(dv){data.votes=data.votes.filter(x=>x.id!==dv.dataset.deleteVote);save();render();toast("Vote removed.")}
+ const rule=e.target.closest("[data-delete-rule]");if(rule){data.rules.splice(Number(rule.dataset.deleteRule),1);save();render();toast("Rule removed.")}
+ const rem=e.target.closest("[data-remove-member]");
+ if(rem){const m=member(rem.dataset.removeMember);if(m&&confirm("Remove "+m.name+" from this demo roster?")){data.members=data.members.filter(x=>x.id!==m.id);data.chores.forEach(c=>{if(c.assignee===m.id)c.assignee=data.members[0]?.id||""});if(data.currentUser===m.name)data.currentUser=data.members[0]?.name||"Family";save();render();toast("Member removed.")}}
+ const become=e.target.closest("[data-become]");if(become){const m=member(become.dataset.become);if(m){data.currentUser=m.name;data.view=m.role==="Parent"?"Parent":"Member";save();render();toast("Viewing as "+m.name)}}
+ const redeem=e.target.closest("[data-redeem]");
+ if(redeem){const r=data.rewards.find(x=>x.id===redeem.dataset.redeem),m=currentMember();if(!r||!m)return;if(r.who==="Kids"&&m.role==="Parent"){toast("This reward is for kids.");return}if(r.who==="Parents"&&m.role!=="Parent"){toast("This reward is for parents.");return}if(m.points<r.cost){toast("Not enough points yet!");return}if(confirm(`Redeem "${r.title}" for ${r.cost} points?`)){m.points-=r.cost;data.redemptions.push({title:r.title,cost:r.cost,name:m.name});save();render();toast("Reward redeemed!")}}
+ const cast=e.target.closest("[data-cast-vote]");if(cast){const v=data.votes.find(x=>x.id===cast.dataset.castVote);if(v){v.votes[currentMember().id]=Number(cast.dataset.option);save();render();toast("Your vote is counted!")}}
 });
-$("#switchView").addEventListener("click",()=>{
-  if(data.view==="Parent"){
-    data.view="Member";
-    const first=data.members.find(m=>m.role!=="Parent");
-    if(first)data.currentUser=first.name;
-  } else {
-    data.view="Parent";
-    const first=data.members.find(m=>m.role==="Parent");
-    if(first)data.currentUser=first.name;
-  }
-  save();render();toast("Switched to "+data.view+" View");
-});
+$("#switchView").addEventListener("click",()=>{if(data.view==="Parent"){data.view="Member";const first=data.members.find(m=>m.role!=="Parent");if(first)data.currentUser=first.name}else{data.view="Parent";const first=data.members.find(m=>m.role==="Parent");if(first)data.currentUser=first.name}save();render();toast("Switched to "+data.view+" View")});
 document.addEventListener("change",e=>{
-  if(e.target.matches("[data-chore]")){
-    const c=data.chores.find(x=>x.id===e.target.dataset.chore);
-    if(c&&!c.done){c.done=true;const m=member(c.assignee);if(m)m.points+=Number(c.points);}
-    else if(c&&c.done&&isParent()){
-      c.done=false;const m=member(c.assignee);if(m)m.points=Math.max(0,m.points-Number(c.points));
-    } else if(c&&c.done){e.target.checked=true;toast("Ask a parent to reset this chore.");return;}
-    save();render();toast(c?.done?"Chore completed! Points earned.":"Chore reopened.");
-  }
-  if(e.target.matches("[data-shopping]")){
-    const s=data.shopping.find(x=>x.id===e.target.dataset.shopping);
-    if(s)s.done=e.target.checked;save();render();
-  }
+ if(e.target.matches("[data-chore]")){const c=data.chores.find(x=>x.id===e.target.dataset.chore);if(c&&!c.done){c.done=true;const m=member(c.assignee);if(m)m.points+=Number(c.points)}else if(c&&c.done&&isParent()){c.done=false;const m=member(c.assignee);if(m)m.points=Math.max(0,m.points-Number(c.points))}else if(c&&c.done){e.target.checked=true;toast("Ask a parent to reset this chore.");return}save();render();toast(c?.done?"Chore completed! Points earned.":"Chore reopened.")}
+ if(e.target.matches("[data-shopping]")){const s=data.shopping.find(x=>x.id===e.target.dataset.shopping);if(s)s.done=e.target.checked;save();render()}
 });
-$("#choreForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to assign chores.");return;}
-  const f=new FormData(e.target);
-  data.chores.push({id:uid(),title:f.get("title").trim(),assignee:f.get("assignee"),points:Math.max(1,Number(f.get("points"))||10),done:false});
-  save();e.target.reset();render();toast("Chore added!");
-});
-$("#eventForm").addEventListener("submit",e=>{
-  e.preventDefault();const f=new FormData(e.target);
-  data.events.push({id:uid(),title:f.get("title").trim(),date:f.get("date"),time:f.get("time"),who:f.get("who")});
-  save();e.target.reset();render();toast("Event added!");
-});
-$("#prevMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()-1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar();});
-$("#nextMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()+1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar();});
-$("#rewardForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to create rewards.");return;}
-  const f=new FormData(e.target);
-  data.rewards.push({id:uid(),title:f.get("title").trim(),cost:Math.max(1,Number(f.get("cost"))||1),who:f.get("who")});
-  save();e.target.reset();render();toast("Reward created!");
-});
-$("#shoppingForm").addEventListener("submit",e=>{
-  e.preventDefault();const f=new FormData(e.target);
-  data.shopping.push({id:uid(),title:f.get("title").trim(),qty:f.get("qty").trim(),category:f.get("category"),done:false});
-  save();e.target.reset();render();toast("Added to shopping list!");
-});
-$("#clearShopping").addEventListener("click",()=>{
-  data.shopping=data.shopping.filter(s=>!s.done);save();render();toast("Checked items removed.");
-});
-$("#voteForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to create a vote.");return;}
-  const f=new FormData(e.target),opts=f.get("options").split(",").map(s=>s.trim()).filter(Boolean);
-  if(opts.length<2){toast("Add at least two options.");return;}
-  data.votes.push({id:uid(),title:f.get("title").trim(),options:[...new Set(opts)],votes:{}});
-  save();e.target.reset();render();toast("Family vote created!");
-});
-$("#chatForm").addEventListener("submit",e=>{
-  e.preventDefault();const f=new FormData(e.target),msg=f.get("message").trim();
-  if(!msg)return;
-  data.messages.push({name:currentMember()?.name||"Family",text:msg,time:new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})});
-  save();e.target.reset();renderChat();
-});
-$("#memberForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to manage members.");return;}
-  const f=new FormData(e.target),name=f.get("name").trim();
-  if(data.members.some(m=>m.name.toLowerCase()===name.toLowerCase())){toast("That name is already on the roster.");return;}
-  data.members.push({id:uid(),name,role:f.get("role"),points:0});
-  save();e.target.reset();render();toast("Family member added!");
-});
-$("#ruleForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to edit rules.");return;}
-  const f=new FormData(e.target),r=f.get("rule").trim();if(!r)return;
-  data.rules.push(r);save();e.target.reset();renderRules();toast("Family rule added!");
-});
-$("#settingsForm").addEventListener("submit",e=>{
-  e.preventDefault();if(!isParent()){toast("Switch to Parent View to change settings.");return;}
-  const f=new FormData(e.target);
-  data.familyName=f.get("familyName").trim()||"Our Family";
-  data.pointsName=f.get("pointsName").trim()||"Points";
-  data.settings.defaultView=f.get("defaultView");
-  save();render();toast("Settings saved!");
-});
-$("#resetData").addEventListener("click",()=>{
-  if(confirm("Reset all FamSync beta data saved in this browser? This cannot be undone.")){
-    data=initialData();calendarMonth=new Date(data.calendarMonth);save();go("dashboard");toast("Demo data reset.");
-  }
-});
-if(!data.members.length){data.members=initialData().members;data.currentUser=data.members[0].name;}
-if(!member(data.members.find(m=>m.name===data.currentUser)?.id)) {
-  if(!data.members.some(m=>m.name===data.currentUser))data.currentUser=data.members[0].name;
-}
+$("#choreForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to assign chores.");return}const f=new FormData(e.target);data.chores.push({id:uid(),title:f.get("title").trim(),assignee:f.get("assignee"),points:Math.max(1,Number(f.get("points"))||10),done:false});save();e.target.reset();render();toast("Chore added!")});
+$("#eventForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);data.events.push({id:uid(),title:f.get("title").trim(),date:f.get("date"),time:f.get("time"),who:f.get("who")});save();e.target.reset();render();toast("Event added!")});
+$("#prevMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()-1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar()});
+$("#nextMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()+1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar()});
+$("#rewardForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to create rewards.");return}const f=new FormData(e.target);data.rewards.push({id:uid(),title:f.get("title").trim(),cost:Math.max(1,Number(f.get("cost"))||1),who:f.get("who")});save();e.target.reset();render();toast("Reward created!")});
+$("#shoppingForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);data.shopping.push({id:uid(),title:f.get("title").trim(),qty:f.get("qty").trim(),category:f.get("category"),done:false});save();e.target.reset();render();toast("Added to shopping list!")});
+$("#clearShopping").addEventListener("click",()=>{data.shopping=data.shopping.filter(s=>!s.done);save();render();toast("Checked items removed.")});
+$("#voteForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to create a vote.");return}const f=new FormData(e.target),opts=f.get("options").split(",").map(s=>s.trim()).filter(Boolean);if(opts.length<2){toast("Add at least two options.");return}data.votes.push({id:uid(),title:f.get("title").trim(),options:[...new Set(opts)],votes:{}});save();e.target.reset();render();toast("Family vote created!")});
+$("#chatForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target),msg=f.get("message").trim();if(!msg)return;data.messages.push({name:currentMember()?.name||"Family",text:msg,time:new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})});save();e.target.reset();renderChat()});
+$("#memberForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to manage members.");return}const f=new FormData(e.target),name=f.get("name").trim();if(data.members.some(m=>m.name.toLowerCase()===name.toLowerCase())){toast("That name is already on the roster.");return}data.members.push({id:uid(),name,role:f.get("role"),points:0});save();e.target.reset();render();toast("Family member added!")});
+$("#ruleForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to edit rules.");return}const f=new FormData(e.target),r=f.get("rule").trim();if(!r)return;data.rules.push(r);save();e.target.reset();renderRules();toast("Family rule added!")});
+$("#settingsForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to change settings.");return}const f=new FormData(e.target);data.familyName=f.get("familyName").trim()||"Our Family";data.pointsName=f.get("pointsName").trim()||"Points";data.settings.defaultView=f.get("defaultView");save();render();toast("Settings saved!")});
+$("#resetData").addEventListener("click",()=>{if(confirm("Reset all FamSync beta data saved in this browser? This cannot be undone.")){data=initialData();calendarMonth=new Date(data.calendarMonth);save();go("dashboard");toast("Demo data reset.")}});
+if(!data.members.length){data.members=initialData().members;data.currentUser=data.members[0].name}
+if(!data.members.some(m=>m.name===data.currentUser))data.currentUser=data.members[0].name;
 render();
 </script>
-  <script type="module">
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDXWw6Bu9KIxUK3rBIj71PIJJp1zqxVtLE",
-  authDomain: "famsync-755b8.firebaseapp.com",
-  projectId: "famsync-755b8",
-  storageBucket: "famsync-755b8.firebasestorage.app",
-  messagingSenderId: "515752003098",
-  appId: "1:515752003098:web:e8d6157ce02f044dc3f3a3"
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+ getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,
+ GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {getFirestore} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyDXWw6Bu9KIxUK3rBIj71PIJJp1zqxVtLE",
+ authDomain:"famsync-755b8.firebaseapp.com",
+ projectId:"famsync-755b8",
+ storageBucket:"famsync-755b8.firebasestorage.app",
+ messagingSenderId:"515752003098",
+ appId:"1:515752003098:web:e8d6157ce02f044dc3f3a3"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-const screen = document.getElementById("authScreen");
-const form = document.getElementById("authForm");
-const email = document.getElementById("authEmail");
-const password = document.getElementById("authPassword");
-const message = document.getElementById("authMessage");
+const screen=document.getElementById("authScreen");
+const form=document.getElementById("authForm");
+const email=document.getElementById("authEmail");
+const password=document.getElementById("authPassword");
+const message=document.getElementById("authMessage");
 
-function showError(error) {
-  const errors = {
-    "auth/invalid-credential": "Incorrect email or password.",
-    "auth/email-already-in-use": "That email already has an account. Sign in instead.",
-    "auth/weak-password": "Your password needs at least 6 characters.",
-    "auth/invalid-email": "Enter a valid email address.",
-    "auth/popup-closed-by-user": "Google sign-in was canceled.",
-    "auth/popup-blocked": "Your browser blocked the Google sign-in pop-up."
-  };
-  message.textContent = errors[error.code] || error.message || "Something went wrong.";
+function showError(error){
+ const errors={
+  "auth/invalid-credential":"Incorrect email or password.",
+  "auth/email-already-in-use":"That email already has an account. Sign in instead.",
+  "auth/weak-password":"Your password needs at least 6 characters.",
+  "auth/invalid-email":"Enter a valid email address.",
+  "auth/popup-closed-by-user":"Google sign-in was canceled.",
+  "auth/popup-blocked":"Your browser blocked the Google sign-in pop-up.",
+  "auth/network-request-failed":"Network error. Check your internet connection and try again.",
+  "auth/operation-not-allowed":"This sign-in method is not enabled in Firebase."
+ };
+ message.textContent=errors[error.code]||error.message||"Something went wrong.";
 }
 
-form.addEventListener("submit", async event => {
-  event.preventDefault();
-  message.textContent = "Signing in...";
-  try {
-    await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
-  } catch (error) {
-    showError(error);
-  }
+form.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!form.reportValidity())return;
+ message.textContent="Signing in...";
+ try{await signInWithEmailAndPassword(auth,email.value.trim(),password.value)}
+ catch(error){showError(error)}
 });
 
-document.getElementById("signupBtn").addEventListener("click", async () => {
-  message.textContent = "Creating account...";
-  try {
-    await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
-  } catch (error) {
-    showError(error);
-  }
+document.getElementById("signupBtn").addEventListener("click",async()=>{
+ if(!form.reportValidity())return;
+ message.textContent="Creating account...";
+ try{await createUserWithEmailAndPassword(auth,email.value.trim(),password.value)}
+ catch(error){showError(error)}
 });
 
-document.getElementById("googleBtn").addEventListener("click", async () => {
-  message.textContent = "Opening Google sign-in...";
-  try {
-    await signInWithPopup(auth, new GoogleAuthProvider());
-  } catch (error) {
-    showError(error);
-  }
+document.getElementById("googleBtn").addEventListener("click",async()=>{
+ message.textContent="Opening Google sign-in...";
+ try{await signInWithPopup(auth,new GoogleAuthProvider())}
+ catch(error){showError(error)}
 });
 
-const signOutButton = document.createElement("button");
-signOutButton.className = "btn btn-secondary";
-signOutButton.textContent = "Sign Out";
-signOutButton.style.display = "none";
+const signOutButton=document.createElement("button");
+signOutButton.className="btn btn-secondary";
+signOutButton.textContent="Sign Out";
+signOutButton.style.display="none";
 document.querySelector(".top-actions").appendChild(signOutButton);
 
-signOutButton.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    alert(error.message);
-  }
+signOutButton.addEventListener("click",async()=>{
+ try{await signOut(auth)}
+ catch(error){alert(error.message)}
 });
 
-onAuthStateChanged(auth, user => {
-  document.body.classList.toggle("logged-in", false);
-  screen.style.display = user ? "none" : "block";
-  signOutButton.style.display = user ? "" : "none";
-
-  if (user) {
-    console.log("Signed in:", user.email);
-  }
+onAuthStateChanged(auth,user=>{
+ document.body.classList.toggle("logged-in",!!user);
+ screen.style.display=user?"none":"block";
+ signOutButton.style.display=user?"":"none";
+ if(user)console.log("Signed in:",user.email);
 });
 
-console.log("Firebase connected!");
-</script>
+console.log("Firebase initialized.");
 </script>
 </body>
-  <div id="authScreen">
-  <h2>Welcome to FamSync</h2>
-  <p class="subtitle">Sign in or create your family account.</p>
-  <form id="authForm">
-    <input id="authEmail" type="email" placeholder="Email address" required>
-    <input id="authPassword" type="password" placeholder="Password (6+ characters)" minlength="6" required>
-    <button class="btn btn-primary" style="width:100%">Sign In</button>
-  </form>
-  <button id="signupBtn" class="btn btn-secondary" style="width:100%">Create Account</button>
-  <button id="googleBtn" class="btn btn-secondary" style="width:100%">Continue with Google</button>
-  <p id="authMessage"></p>
-</div>
 </html>
-
