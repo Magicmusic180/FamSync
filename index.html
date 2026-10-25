@@ -844,7 +844,7 @@ signOutButton.addEventListener("click", async () => {
 });
 
 onAuthStateChanged(auth, user => {
-  document.body.classList.toggle("logged-in", !!user);
+  document.body.classList.toggle("logged-in", false);
   screen.style.display = user ? "none" : "block";
   signOutButton.style.display = user ? "" : "none";
 
