@@ -251,7 +251,7 @@ label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
   <div class="card span-6"><div class="section-head"><div><h2>Family Rules</h2><p>Keep household expectations clear.</p></div></div><div id="rulesList"></div>
     <form id="ruleForm" style="display:flex;gap:8px;margin-top:15px"><input name="rule" placeholder="Add a family rule..." required><button class="btn btn-primary">Add</button></form>
   </div>
-  <div class="card span-6"><div class="section-head"><div>## Family Settings</h2><p>Customize this beta experience.</p></div></div>
+  <div class="card span-6"><div class="section-head"><div><h2>Family Settings</h2><p>Customize this beta experience.</p></div></div>
     <form id="settingsForm" class="form">
       <div class="field full"><label>Family name</label><input id="familyName" name="familyName" placeholder="Our Family"></div>
       <div class="field full"><label>Points name</label><input id="pointsName" name="pointsName" placeholder="Points"></div>
@@ -475,11 +475,15 @@ document.getElementById("googleBtn").addEventListener("click",async()=>{
  catch(error){showError(error)}
 });
 
-const signOutButton=document.createElement("button");
-signOutButton.className="btn btn-secondary";
-signOutButton.textContent="Sign Out";
-signOutButton.style.display="none";
-document.querySelector(".top-actions").appendChild(signOutButton);
+const topActionsEl = document.querySelector(".top-actions");
+let signOutButton = document.getElementById("signOutBtn");
+if (!signOutButton) {
+ signOutButton = document.createElement("button");
+ signOutButton.id = "signOutBtn";
+ signOutButton.className = "btn btn-secondary";
+ signOutButton.textContent = "Sign Out";
+ topActionsEl.appendChild(signOutButton);
+}
 
 signOutButton.addEventListener("click",async()=>{
  try{await signOut(auth)}
@@ -492,7 +496,9 @@ onAuthStateChanged(auth,user=>{
  signOutButton.style.display=user?"":"none";
  if(user){
    console.log("Signed in:",user.email);
-   render();
+   setTimeout(() => {
+     render();
+   }, 50);
  }
 });
 
