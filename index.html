@@ -1,508 +1,772 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FamSync | Your Family Hub</title>
-<style>
-#authScreen{max-width:420px;margin:70px auto;padding:25px;background:var(--panel);border:1px solid var(--border);border-radius:16px}
-#authScreen h2{margin-top:0}
-#authScreen input,#authScreen button{margin-top:10px}
-#authMessage{color:var(--muted);font-size:13px}
-body:not(.logged-in) .app{display:none}
-:root{--bg:#10111a;--panel:#191b28;--panel2:#202335;--purple:#9585ff;--text:#f5f5ff;--muted:#a1a5bb;--border:#303247;--green:#72e6b0;--red:#ff858f}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.app{display:flex;min-height:100vh}
-.sidebar{width:245px;background:#141521;border-right:1px solid var(--border);padding:24px 15px;display:flex;flex-direction:column;gap:25px;flex-shrink:0}
-.logo{display:flex;align-items:center;gap:11px;padding:0 10px}
-.logo-icon{background:var(--purple);color:#171327;width:39px;height:39px;border-radius:13px;display:grid;place-items:center;font-size:22px;font-weight:900}
-.logo h2{margin:0;font-size:21px;letter-spacing:-1px}
-.logo small{color:var(--muted);font-size:11px}
-.nav-label{color:#777c96;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 12px;margin-bottom:7px}
-.nav{display:flex;flex-direction:column;gap:5px}
-.nav button{background:transparent;border:0;color:var(--muted);text-align:left;padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;font-size:13px}
-.nav button:hover,.nav button.active{background:#29263f;color:white}
-.nav button.active{box-shadow:inset 3px 0 var(--purple)}
-.nav-icon{width:20px;text-align:center;font-size:16px}
-.sidebar-bottom{margin-top:auto;border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:14px;font-size:12px;color:var(--muted)}
-.sidebar-bottom strong{display:block;color:white;margin-bottom:5px}
-main{flex:1;min-width:0;padding:30px clamp(16px,4vw,45px);max-width:1600px;margin:0 auto;width:100%}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:30px}
-.eyebrow{color:var(--purple);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-h1{font-size:clamp(25px,3vw,34px);letter-spacing:-1.1px;margin:6px 0}
-.subtitle{color:var(--muted);font-size:13px;margin:7px 0 0}
-.top-actions{display:flex;gap:9px;align-items:center}
-.avatar{width:39px;height:39px;border-radius:13px;background:#393452;display:grid;place-items:center;font-weight:800;color:#dcd4ff}
-.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:12px}
-.btn-primary{background:var(--purple);color:#171327}
-.btn-secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
-.btn:hover{filter:brightness(1.1)}
-.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;min-width:0}
-.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
-.stat-label{color:var(--muted);font-size:12px}
-.stat-value{font-size:29px;font-weight:800;letter-spacing:-1px;margin:13px 0 5px}
-.stat-foot{font-size:11px;color:var(--muted)}
-.stat-icon{float:right;font-size:20px;background:var(--panel2);padding:9px;border-radius:11px}
-.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
-.section-head h2{font-size:16px;margin:0}
-.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
-.text-link{color:var(--purple);background:none;border:0;font-size:12px;font-weight:700}
-.list{display:flex;flex-direction:column;gap:9px}
-.item{display:flex;align-items:center;gap:11px;background:var(--panel2);padding:12px;border-radius:11px;min-width:0}
-.item-main{flex:1;min-width:0}
-.item-title{font-size:13px;font-weight:700;overflow-wrap:anywhere}
-.item-sub{font-size:11px;color:var(--muted);margin-top:4px}
-.check{width:18px;height:18px;accent-color:var(--purple);flex-shrink:0}
-.done .item-title{text-decoration:line-through;color:var(--muted)}
-.pill{background:#302b4c;color:#c9c0ff;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:800;white-space:nowrap}
-.green{color:var(--green)}.muted{color:var(--muted)}
-.empty{padding:25px 10px;text-align:center;color:var(--muted);font-size:12px}
-input,select,textarea{background:#11131e;color:white;border:1px solid var(--border);border-radius:9px;padding:11px;width:100%;outline:none;min-width:0}
-input:focus,select:focus,textarea:focus{border-color:var(--purple)}
-label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
-.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field{min-width:0}.field.full{grid-column:1/-1}
-.form-actions{grid-column:1/-1;display:flex;justify-content:flex-end}
-.form-actions button{width:auto}
-.progress{height:6px;background:#303247;border-radius:9px;overflow:hidden;margin-top:12px}
-.progress div{height:100%;background:var(--purple);border-radius:9px}
-.member{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.member:last-child{border-bottom:0}
-.member-avatar{width:39px;height:39px;border-radius:13px;background:#38314f;display:grid;place-items:center;font-size:18px;flex-shrink:0}
-.member-info{flex:1;min-width:0}.member-name{font-size:13px;font-weight:700}
-.member-role{font-size:11px;color:var(--muted);margin-top:4px}
-.vote-option{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;background:var(--panel2);border-radius:9px;margin-top:8px;font-size:12px}
-.vote-bar{height:4px;background:#34364b;border-radius:5px;margin-top:7px}
-.vote-bar div{height:100%;background:var(--purple);border-radius:5px}
-.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.day-name{text-align:center;color:var(--muted);font-size:10px;padding:8px 0}
-.day{min-height:67px;background:var(--panel2);border-radius:8px;padding:7px 5px;border:1px solid transparent;font-size:11px}
-.day.today{border-color:var(--purple);color:var(--purple)}
-.day-event{margin-top:5px;background:#393052;color:#d8ceff;border-radius:4px;padding:3px;font-size:9px;overflow-wrap:anywhere}
-.chat-box{height:310px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:10px 0}
-.chat-msg{background:var(--panel2);border-radius:12px;padding:11px;max-width:85%;align-self:flex-start}
-.chat-msg.mine{align-self:flex-end;background:#393052}
-.chat-author{font-size:10px;color:var(--purple);font-weight:800;margin-bottom:5px}
-.chat-text{font-size:12px;overflow-wrap:anywhere;white-space:pre-wrap}
-.chat-time{font-size:9px;color:var(--muted);margin-top:5px}
-.rule{padding:13px;background:var(--panel2);border-radius:10px;margin-bottom:9px;font-size:12px;display:flex;gap:10px;align-items:center}
-.rule span{flex:1}
-.badge{font-size:10px;background:#2a493f;color:var(--green);padding:5px 8px;border-radius:7px}
-.notice{background:#24213a;border:1px solid #42395f;border-radius:12px;padding:13px;color:#d5ceff;font-size:12px;line-height:1.6;margin-bottom:18px}
-.hidden{display:none!important}
-.footer{text-align:center;color:#656982;font-size:10px;margin-top:28px}
-@media(max-width:950px){.sidebar{width:205px}.span-3{grid-column:span 6}.span-4,.span-5,.span-7,.span-8{grid-column:span 12}}
-@media(max-width:650px){.app{display:block}.sidebar{width:100%;padding:13px;border-right:0;border-bottom:1px solid var(--border);gap:12px}.logo{padding:0 5px}.nav-label,.sidebar-bottom{display:none}.nav{display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding-bottom:2px}.nav button{white-space:nowrap;padding:10px;font-size:11px}.nav button.active{box-shadow:inset 0 -3px var(--purple)}main{padding:22px 14px}.topbar{align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.span-3,.span-6{grid-column:span 12}.card{padding:15px}.form{grid-template-columns:1fr}.field.full,.form-actions{grid-column:1}.day{min-height:48px;padding:4px;font-size:10px}.day-event{font-size:8px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FamSync - Family Hub</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Dynamic UI Visibility toggle via body class */
+    body:not(.logged-in) .app-content { display: none !important; }
+    body.logged-in #login-view { display: none !important; }
+    body.logged-in .app-content { display: flex !important; }
+
+    /* Custom scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-<div id="authScreen">
-  <h2>Welcome to FamSync</h2>
-  <p class="subtitle">Sign in or create your family account.</p>
-  <form id="authForm">
-    <input id="authEmail" type="email" placeholder="Email address" autocomplete="email" required>
-    <input id="authPassword" type="password" placeholder="Password (6+ characters)" minlength="6" autocomplete="current-password" required>
-    <button class="btn btn-primary" style="width:100%">Sign In</button>
-  </form>
-  <button id="signupBtn" class="btn btn-secondary" style="width:100%">Create Account</button>
-  <button id="googleBtn" class="btn btn-secondary" style="width:100%">Continue with Google</button>
-  <p id="authMessage" role="status"></p>
-</div>
+  <!-- ==================== AUTH / LOGIN VIEW ==================== -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/20 text-center">
+      <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+        <i class="fa-solid fa-house-chimney-user"></i>
+      </div>
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">FamSync</h1>
+      <p class="text-slate-500 text-sm mt-1 mb-6">Your all-in-one family organization hub</p>
 
-<div class="app">
-<aside class="sidebar">
-  <div class="logo"><div class="logo-icon">F</div><div><h2>FamSync</h2><small>YOUR FAMILY HUB</small></div></div>
-  <div>
-    <div class="nav-label">WORKSPACE</div>
-    <nav class="nav" id="navigation">
-      <button class="active" data-page="dashboard"><span class="nav-icon">⌂</span>Dashboard</button>
-      <button data-page="calendar"><span class="nav-icon">▦</span>Family Calendar</button>
-      <button data-page="chores"><span class="nav-icon">✓</span>Chores List</button>
-      <button data-page="rewards"><span class="nav-icon">✧</span>Reward Center</button>
-      <button data-page="shopping"><span class="nav-icon">🛒</span>Shopping List</button>
-      <button data-page="votes"><span class="nav-icon">☷</span>Family Votes</button>
-      <button data-page="chat"><span class="nav-icon">☏</span>Family Chat</button>
+      <form id="loginForm" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Select Family Member</label>
+          <select id="userSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+            <option value="Mom (Sarah)">Mom (Sarah) - Admin</option>
+            <option value="Dad (Mark)">Dad (Mark)</option>
+            <option value="Alex (Teen)">Alex (Teen)</option>
+            <option value="Emma (Kid)">Emma (Kid)</option>
+          </select>
+        </div>
+        <button type="submit" data-action="login" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] transition-all text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Enter Family Dashboard</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-6 border-t border-slate-100 text-xs text-slate-400">
+        Syncs instantly across devices using Cloud Data
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APPLICATION CONTENT ==================== -->
+  <div class="app-content min-h-screen flex-col flex-1 hidden">
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-md shadow-indigo-200">
+            <i class="fa-solid fa-house-chimney"></i>
+          </div>
+          <div>
+            <span class="font-bold text-xl tracking-tight text-slate-900 block leading-tight">FamSync</span>
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline-block">The Miller Family</span>
+          </div>
+        </div>
+
+        <!-- View Switcher Tabs (Desktop) -->
+        <nav class="hidden md:flex items-center space-x-1 bg-slate-100 p-1 rounded-xl">
+          <button data-page="chores" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-list-check mr-1.5"></i>Chores
+          </button>
+          <button data-page="calendar" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-calendar-days mr-1.5"></i>Calendar
+          </button>
+          <button data-page="shopping" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-cart-shopping mr-1.5"></i>Shopping
+          </button>
+          <button data-page="rewards" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-star mr-1.5"></i>Rewards
+          </button>
+          <button data-page="votes" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-check-to-slot mr-1.5"></i>Polls
+          </button>
+          <button data-page="chat" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+            <i class="fa-solid fa-comments mr-1.5"></i>Chat
+          </button>
+        </nav>
+
+        <!-- Right Side User Menu & Controls -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full">
+            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold" id="user-avatar-initial">
+              M
+            </div>
+            <span class="text-xs font-semibold text-indigo-900" id="current-user-name">Mom</span>
+          </div>
+
+          <button data-action="logout" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Log Out">
+            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Page Body -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      
+      <!-- PAGE: CHORES -->
+      <section id="page-chores" class="page-view space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Family Chore Tracker</h2>
+            <p class="text-sm text-slate-500">Manage daily tasks and earn family reward points</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button data-go="addChoreModal" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-100 flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-plus"></i> Add New Chore
+            </button>
+          </div>
+        </div>
+
+        <!-- Chores List Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="chores-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- PAGE: CALENDAR -->
+      <section id="page-calendar" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Shared Family Calendar</h2>
+            <p class="text-sm text-slate-500">Keep everyone on time with synced events</p>
+          </div>
+          <button data-go="addEventModal" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md flex items-center gap-2">
+            <i class="fa-solid fa-calendar-plus"></i> Add Event
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="calendar-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE: SHOPPING -->
+      <section id="page-shopping" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Shared Shopping List</h2>
+            <p class="text-sm text-slate-500">Never forget groceries or household supplies</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
+          <form id="shoppingForm" class="flex gap-2">
+            <input type="text" id="shoppingInput" required placeholder="Add item (e.g. Organic Milk, Apples)..." class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md">
+              <i class="fa-solid fa-plus mr-1"></i> Add
+            </button>
+          </form>
+
+          <div class="divide-y divide-slate-100 mt-4" id="shopping-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE: REWARDS -->
+      <section id="page-rewards" class="page-view hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Rewards & Points</h2>
+            <p class="text-sm text-slate-500">Redeem hard-earned points for awesome rewards</p>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 px-4 py-2 rounded-2xl flex items-center gap-2">
+            <i class="fa-solid fa-coins text-amber-500 text-xl"></i>
+            <span class="text-xl font-black text-amber-700" id="user-points-total">120 pts</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="rewards-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- PAGE: VOTES / POLLS -->
+      <section id="page-votes" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Family Polls</h2>
+            <p class="text-sm text-slate-500">Vote on weekend plans, dinner ideas, and activities</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="votes-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- PAGE: CHAT -->
+      <section id="page-chat" class="page-view hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm flex flex-col h-[600px] overflow-hidden">
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+              <h3 class="font-bold text-slate-800">Family Wall Chat</h3>
+            </div>
+            <span class="text-xs text-slate-400">All messages encrypted locally</span>
+          </div>
+
+          <!-- Chat messages area -->
+          <div class="flex-1 p-4 overflow-y-auto space-y-3" id="chat-container">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Chat Input -->
+          <form id="chatForm" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+            <input type="text" id="chatInput" required placeholder="Type a message to the family..." class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+            <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md flex items-center gap-1">
+              <span>Send</span>
+              <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mobile Navigation Bar (Bottom) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-30 flex justify-around p-2 shadow-lg">
+      <button data-page="chores" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-list-check text-lg mb-0.5"></i>
+        <span>Chores</span>
+      </button>
+      <button data-page="calendar" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-calendar-days text-lg mb-0.5"></i>
+        <span>Cal</span>
+      </button>
+      <button data-page="shopping" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-cart-shopping text-lg mb-0.5"></i>
+        <span>Shop</span>
+      </button>
+      <button data-page="rewards" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-star text-lg mb-0.5"></i>
+        <span>Rewards</span>
+      </button>
+      <button data-page="votes" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-check-to-slot text-lg mb-0.5"></i>
+        <span>Polls</span>
+      </button>
+      <button data-page="chat" class="nav-btn flex flex-col items-center p-2 text-xs font-medium text-slate-500">
+        <i class="fa-solid fa-comments text-lg mb-0.5"></i>
+        <span>Chat</span>
+      </button>
     </nav>
   </div>
-  <div>
-    <div class="nav-label">FAMILY</div>
-    <nav class="nav">
-      <button data-page="roster"><span class="nav-icon">♙</span>Family Roster</button>
-      <button data-page="settings"><span class="nav-icon">⚙</span>Rules &amp; Settings</button>
-    </nav>
-  </div>
-  <div class="sidebar-bottom"><strong>✦ Family first</strong>Keep everyone organized, connected, and on the same page.</div>
-</aside>
 
-<main>
-<header class="topbar">
-  <div>
-    <div class="eyebrow" id="pageEyebrow">YOUR FAMILY WORKSPACE</div>
-    <h1 id="pageTitle">Family Dashboard</h1>
-    <p class="subtitle" id="pageSubtitle">Everything your family needs, all in one place.</p>
-  </div>
-  <div class="top-actions">
-    <button class="btn btn-secondary" id="switchView">↔ <span id="viewLabel">Parent View</span></button>
-    <div class="avatar" id="topAvatar">P</div>
-  </div>
-</header>
+  <!-- ==================== MODALS ==================== -->
+  <!-- Modal Backdrop -->
+  <div id="modalBackdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden transition-opacity"></div>
 
-<div class="notice"><strong>Beta preview</strong> · Try the features and switch between Parent View and Member View. This version saves data in this browser. Family-wide syncing is not connected yet.</div>
-
-<section id="page-dashboard" class="page">
-<div class="grid">
-  <div class="card span-3"><span class="stat-icon">✓</span><div class="stat-label">Chores completed</div><div class="stat-value" id="statChores">0</div><div class="stat-foot">Completed in this beta</div></div>
-  <div class="card span-3"><span class="stat-icon">✧</span><div class="stat-label">Family points</div><div class="stat-value" id="statPoints">0</div><div class="stat-foot">Earned from completed chores</div></div>
-  <div class="card span-3"><span class="stat-icon">▦</span><div class="stat-label">Upcoming events</div><div class="stat-value" id="statEvents">0</div><div class="stat-foot">Scheduled family activities</div></div>
-  <div class="card span-3"><span class="stat-icon">🛒</span><div class="stat-label">Shopping items</div><div class="stat-value" id="statShopping">0</div><div class="stat-foot">Still on the list</div></div>
-  <div class="card span-7"><div class="section-head"><div><h2>Today's Chores</h2><p>A little progress goes a long way.</p></div><button class="text-link" data-go="chores">View all →</button></div><div class="list" id="dashboardChores"></div></div>
-  <div class="card span-5"><div class="section-head"><div><h2>Family Calendar</h2><p>What's coming up.</p></div><button class="text-link" data-go="calendar">View →</button></div><div class="list" id="dashboardEvents"></div></div>
-  <div class="card span-6"><div class="section-head"><div><h2>Reward Center</h2><p>Rewards worth working toward.</p></div><button class="text-link" data-go="rewards">Explore →</button></div><div class="list" id="dashboardRewards"></div></div>
-  <div class="card span-6"><div class="section-head"><div><h2>Family Votes</h2><p>Everyone gets a say.</p></div><button class="text-link" data-go="votes">View votes →</button></div><div class="list" id="dashboardVotes"></div></div>
-</div>
-</section>
-
-<section id="page-calendar" class="page hidden"><div class="grid">
-  <div class="card span-8"><div class="section-head"><div><h2 id="calendarMonth">Calendar</h2><p>Keep family plans in one place.</p></div><div><button class="btn btn-secondary" id="prevMonth">←</button> <button class="btn btn-secondary" id="nextMonth">→</button></div></div><div class="calendar" id="calendarGrid"></div></div>
-  <div class="card span-4"><div class="section-head"><div><h2>Add an event</h2><p>Plan something together.</p></div></div>
-    <form class="form" id="eventForm">
-      <div class="field full"><label>Event name</label><input name="title" placeholder="Family movie night" required></div>
-      <div class="field full"><label>Date</label><input name="date" type="date" required></div>
-      <div class="field full"><label>Time (optional)</label><input name="time" type="time"></div>
-      <div class="field full"><label>Who's invited?</label><select name="who"><option>Everyone</option><option>Parents</option><option>Kids</option></select></div>
-      <div class="form-actions"><button class="btn btn-primary">Add event</button></div>
-    </form>
-    <div class="section-head" style="margin-top:25px"><h2>Upcoming events</h2></div><div class="list" id="eventList"></div>
-  </div>
-</div></section>
-
-<section id="page-chores" class="page hidden"><div class="grid">
-  <div class="card span-7"><div class="section-head"><div><h2>Chores List</h2><p>Check off chores as you finish them.</p></div><span class="pill" id="choreCount">0 chores</span></div><div class="list" id="choreList"></div></div>
-  <div class="card span-5"><div class="section-head"><div><h2>Add a chore</h2><p>Set a task and its points.</p></div></div>
-    <form class="form" id="choreForm">
-      <div class="field full"><label>Chore name</label><input name="title" placeholder="Vacuum the living room" required></div>
-      <div class="field"><label>Assigned to</label><select name="assignee" class="memberOptions"></select></div>
-      <div class="field"><label>Points</label><input name="points" type="number" min="1" max="1000" value="10" required></div>
-      <div class="form-actions"><button class="btn btn-primary">Add chore</button></div>
-    </form><p class="subtitle">Completing a chore awards its points in this beta.</p>
-  </div>
-</div></section>
-
-<section id="page-rewards" class="page hidden"><div class="grid">
-  <div class="card span-12"><div class="section-head"><div><h2>Reward Center</h2><p>Earn points from chores and trade them for rewards.</p></div><span class="pill">YOUR FAMILY REWARDS</span></div><div class="grid" id="rewardCards"></div></div>
-  <div class="card span-6"><div class="section-head"><div><h2>Create a reward</h2><p>Parents can set rewards and point costs.</p></div></div>
-    <form class="form" id="rewardForm">
-      <div class="field full"><label>Reward name</label><input name="title" placeholder="Choose Friday's movie" required></div>
-      <div class="field"><label>Point cost</label><input name="cost" type="number" min="1" value="50" required></div>
-      <div class="field"><label>Available to</label><select name="who"><option>Everyone</option><option>Kids</option><option>Parents</option></select></div>
-      <div class="form-actions"><button class="btn btn-primary">Create reward</button></div>
+  <!-- Add Chore Modal -->
+  <div id="addChoreModal" class="modal-dialog fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-lg mx-auto bg-white rounded-2xl shadow-2xl z-50 p-6 hidden space-y-4">
+    <div class="flex justify-between items-center border-b pb-3">
+      <h3 class="text-lg font-bold text-slate-800">Add New Chore</h3>
+      <button data-action="closeModal" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+    </div>
+    <form id="addChoreForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Chore Title</label>
+        <input type="text" id="choreTitle" required placeholder="e.g., Clean the Kitchen" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Assignee</label>
+          <select id="choreAssignee" class="w-full px-3 py-2 border rounded-xl outline-none text-sm bg-slate-50">
+            <option>Mom (Sarah)</option>
+            <option>Dad (Mark)</option>
+            <option>Alex (Teen)</option>
+            <option>Emma (Kid)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Points</label>
+          <input type="number" id="chorePoints" value="15" min="5" step="5" class="w-full px-3 py-2 border rounded-xl outline-none text-sm">
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" data-action="closeModal" class="px-4 py-2 border text-slate-600 rounded-xl text-sm font-medium">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold shadow-md">Create Chore</button>
+      </div>
     </form>
   </div>
-  <div class="card span-6"><div class="section-head"><div><h2>Redemption history</h2><p>Rewards claimed in this browser.</p></div></div><div class="list" id="redemptionList"></div></div>
-</div></section>
 
-<section id="page-shopping" class="page hidden"><div class="grid">
-  <div class="card span-7"><div class="section-head"><div><h2>Shared Shopping List</h2><p>Everything your family needs to pick up.</p></div><span class="pill" id="shoppingCount">0 items</span></div><div class="list" id="shoppingList"></div><button class="btn btn-secondary" id="clearShopping" style="margin-top:15px">Remove checked items</button></div>
-  <div class="card span-5"><div class="section-head"><div><h2>Add an item</h2><p>Keep the next shopping trip organized.</p></div></div>
-    <form class="form" id="shoppingForm">
-      <div class="field full"><label>Item</label><input name="title" placeholder="Milk, apples, bread..." required></div>
-      <div class="field"><label>Quantity</label><input name="qty" placeholder="e.g. 2"></div>
-      <div class="field"><label>Category</label><select name="category"><option>Groceries</option><option>Household</option><option>School</option><option>Other</option></select></div>
-      <div class="form-actions"><button class="btn btn-primary">Add to list</button></div>
+  <!-- Add Event Modal -->
+  <div id="addEventModal" class="modal-dialog fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-lg mx-auto bg-white rounded-2xl shadow-2xl z-50 p-6 hidden space-y-4">
+    <div class="flex justify-between items-center border-b pb-3">
+      <h3 class="text-lg font-bold text-slate-800">Add Family Event</h3>
+      <button data-action="closeModal" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+    </div>
+    <form id="addEventForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Event Name</label>
+        <input type="text" id="eventTitle" required placeholder="e.g., Family Movie Night" class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Date & Time</label>
+        <input type="datetime-local" id="eventDate" required class="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" data-action="closeModal" class="px-4 py-2 border text-slate-600 rounded-xl text-sm font-medium">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold shadow-md">Add to Calendar</button>
+      </div>
     </form>
   </div>
-</div></section>
 
-<section id="page-votes" class="page hidden"><div class="grid">
-  <div class="card span-7"><div class="section-head"><div><h2>Family Votes</h2><p>Make family decisions together.</p></div></div><div class="list" id="voteList"></div></div>
-  <div class="card span-5"><div class="section-head"><div><h2>Create a vote</h2><p>Let everyone choose their favorite.</p></div></div>
-    <form class="form" id="voteForm">
-      <div class="field full"><label>Question</label><input name="title" placeholder="What should we do Saturday?" required></div>
-      <div class="field full"><label>Options (separate with commas)</label><textarea name="options" rows="3" placeholder="Go bowling, Have a movie night, Go hiking" required></textarea></div>
-      <div class="form-actions"><button class="btn btn-primary">Create vote</button></div>
-    </form>
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl z-50 hidden flex items-center gap-3 transition-transform duration-300 transform translate-y-10">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+    <span id="toast-message" class="text-sm font-medium">Notification message</span>
   </div>
-</div></section>
 
-<section id="page-chat" class="page hidden"><div class="grid">
-  <div class="card span-8"><div class="section-head"><div><h2>Family Chat</h2><p>A place for family messages.</p></div><span class="pill">BETA</span></div><div class="chat-box" id="chatMessages"></div>
-    <form id="chatForm" style="display:flex;gap:8px"><input name="message" placeholder="Write a message..." maxlength="500" required><button class="btn btn-primary">Send</button></form>
-  </div>
-  <div class="card span-4"><h2 style="font-size:15px">Family chat guidelines</h2><p class="subtitle" style="line-height:1.8">Be kind to everyone. Keep messages respectful. Important family plans can go on the shared calendar.</p><div class="notice" style="margin-top:20px">Beta note: messages are stored only in this browser. They are not delivered to other family members yet.</div></div>
-</div></section>
+  <!-- ==================== APPLICATION SCRIPT ==================== -->
+  <script>
+    /**
+     * FAMSYNC APPLICATION STATE & ENGINE
+     * Clean, single-source-of-truth architecture with global delegation listeners.
+     */
 
-<section id="page-roster" class="page hidden"><div class="grid">
-  <div class="card span-7"><div class="section-head"><div><h2>Family Roster</h2><p>Your household, all in one place.</p></div><span class="pill" id="memberCount">0 members</span></div><div id="rosterList"></div></div>
-  <div class="card span-5"><div class="section-head"><div><h2>Add a family member</h2><p>Manage your beta family roster.</p></div></div>
-    <form class="form" id="memberForm">
-      <div class="field full"><label>Display name</label><input name="name" placeholder="Family member's name" required></div>
-      <div class="field full"><label>Role</label><select name="role"><option>Member</option><option>Parent</option></select></div>
-      <div class="form-actions"><button class="btn btn-primary">Add member</button></div>
-    </form><p class="subtitle">These are local demo profiles, not login accounts.</p>
-  </div>
-</div></section>
+    // Initial mock application state
+    const AppState = {
+      currentUser: "Mom (Sarah)",
+      points: 120,
+      activePage: "chores",
+      chores: [
+        { id: 1, title: "Take out recycling", assignee: "Alex (Teen)", points: 10, completed: false },
+        { id: 2, title: "Feed the dog", assignee: "Emma (Kid)", points: 15, completed: true },
+        { id: 3, title: "Unload dishwasher", assignee: "Dad (Mark)", points: 10, completed: false }
+      ],
+      calendar: [
+        { id: 1, title: "Soccer Practice", date: "2026-10-26T17:00" },
+        { id: 2, title: "Family Game Night", date: "2026-10-28T19:00" }
+      ],
+      shopping: [
+        { id: 1, name: "Almond Milk", checked: false },
+        { id: 2, name: "Whole Wheat Bread", checked: true },
+        { id: 3, name: "Bananas", checked: false }
+      ],
+      rewards: [
+        { id: 1, title: "30 Mins Gaming Pass", points: 30, icon: "fa-gamepad" },
+        { id: 2, title: "Pick Movie Night Selection", points: 50, icon: "fa-film" },
+        { id: 3, title: "Ice Cream Outing", points: 80, icon: "fa-ice-cream" }
+      ],
+      polls: [
+        {
+          id: 1,
+          question: "What should we eat for Sunday dinner?",
+          options: [
+            { text: "Homemade Pizza", votes: 3 },
+            { text: "Taco Bar", votes: 2 },
+            { text: "BBQ Burgers", votes: 1 }
+          ]
+        }
+      ],
+      messages: [
+        { id: 1, user: "Dad (Mark)", text: "Who took the car keys?", time: "10:15 AM" },
+        { id: 2, user: "Mom (Sarah)", text: "They are on the kitchen hook!", time: "10:17 AM" }
+      ]
+    };
 
-<section id="page-settings" class="page hidden"><div class="grid">
-  <div class="card span-6"><div class="section-head"><div><h2>Family Rules</h2><p>Keep household expectations clear.</p></div></div><div id="rulesList"></div>
-    <form id="ruleForm" style="display:flex;gap:8px;margin-top:15px"><input name="rule" placeholder="Add a family rule..." required><button class="btn btn-primary">Add</button></form>
-  </div>
-  <div class="card span-6"><div class="section-head"><div><h2>Family Settings</h2><p>Customize this beta experience.</p></div></div>
-    <form id="settingsForm" class="form">
-      <div class="field full"><label>Family name</label><input id="familyName" name="familyName" placeholder="Our Family"></div>
-      <div class="field full"><label>Points name</label><input id="pointsName" name="pointsName" placeholder="Points"></div>
-      <div class="field full"><label>Default view</label><select id="defaultView" name="defaultView"><option>Parent</option><option>Member</option></select></div>
-      <div class="form-actions"><button class="btn btn-primary">Save settings</button></div>
-    </form>
-    <div style="border-top:1px solid var(--border);margin-top:25px;padding-top:20px"><h3 style="font-size:13px">Beta data</h3><p class="subtitle">Reset this browser's FamSync demo data to the original sample.</p><button class="btn btn-secondary" id="resetData">Reset demo data</button></div>
-  </div>
-</div></section>
+    // Navigation Switcher Function
+    function switchPage(pageId) {
+      if (!pageId) return;
+      AppState.activePage = pageId;
 
-<div class="footer">FAMSYNC · FAMILY LIFE, IN SYNC · BETA</div>
-</main>
-</div>
+      // Hide all page views
+      document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
 
-<script>
-const $=s=>document.querySelector(s);
-const $$=s=>[...document.querySelectorAll(s)];
-const today=new Date();
-const dateString=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-const uid=()=>Math.random().toString(36).slice(2,10);
-const initialData=()=>({
- familyName:"Our Family",pointsName:"Points",view:"Parent",currentUser:"Alex",
- calendarMonth:new Date(today.getFullYear(),today.getMonth(),1).toISOString(),
- members:[{id:"m1",name:"Mom",role:"Parent",points:0},{id:"m2",name:"Dad",role:"Parent",points:0},{id:"m3",name:"Alex",role:"Member",points:0},{id:"m4",name:"Sam",role:"Member",points:0}],
- chores:[{id:"c1",title:"Make the bed",assignee:"m3",points:10,done:false},{id:"c2",title:"Feed the pets",assignee:"m4",points:15,done:false},{id:"c3",title:"Load the dishwasher",assignee:"m3",points:20,done:false}],
- rewards:[{id:"r1",title:"Choose movie night",cost:50,who:"Everyone"},{id:"r2",title:"Pick a family dessert",cost:35,who:"Everyone"},{id:"r3",title:"Extra game time",cost:100,who:"Kids"}],
- redemptions:[],events:[],shopping:[{id:"s1",title:"Milk",qty:"1",category:"Groceries",done:false},{id:"s2",title:"Apples",qty:"6",category:"Groceries",done:false}],
- votes:[{id:"v1",title:"What should we do this weekend?",options:["Movie night","Bowling","Picnic"],votes:{}}],messages:[],
- rules:["Treat each other with respect","Finish chores before screen time","Help keep shared spaces tidy"],settings:{}
-});
-let data;
-try{const saved=localStorage.getItem("famsync-beta-v1");data=saved?{...initialData(),...JSON.parse(saved)}:initialData()}catch(e){data=initialData()}
-let activePage="dashboard";
-let calendarMonth=new Date(data.calendarMonth||dateString(today));
-let noticeTimer;
-function save(){try{localStorage.setItem("famsync-beta-v1",JSON.stringify(data))}catch(e){alert("Your browser could not save the changes.")}}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function member(id){return data.members.find(m=>m.id===id)}
-function currentMember(){return data.members.find(m=>m.name===data.currentUser)||data.members[0]}
-function isParent(){return data.view==="Parent"}
-function points(){return currentMember()?.points||0}
-function initials(name){return(name||"?").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
-function empty(msg){return`<div class="empty">${esc(msg)}</div>`}
-function safeDate(s){if(!s)return null;const d=new Date(s+"T12:00:00");return Number.isNaN(d.getTime())?null:d}
-function prettyDate(s){const d=safeDate(s);return d?d.toLocaleDateString(undefined,{month:"short",day:"numeric"}):"No date"}
-function toast(message){
- let el=$("#toast");if(!el){el=document.createElement("div");el.id="toast";el.style.cssText="position:fixed;bottom:22px;right:22px;background:#302b4c;color:white;padding:13px 18px;border:1px solid #514477;border-radius:12px;z-index:20;font-size:13px;box-shadow:0 8px 35px #0006";document.body.appendChild(el)}
- el.textContent=message;el.classList.remove("hidden");clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>el.classList.add("hidden"),2400)
-}
-const titles={
- dashboard:["YOUR FAMILY WORKSPACE","Family Dashboard","Everything your family needs, all in one place."],
- calendar:["PLAN TOGETHER","Family Calendar","Keep birthdays, plans, and family events organized."],
- chores:["EVERY LITTLE THING COUNTS","Chores List","Complete tasks, earn points, and help out."],
- rewards:["EARN SOMETHING AWESOME","Reward Center","Your points can turn into rewards."],
- shopping:["DON'T FORGET A THING","Shared Shopping List","One list for the whole household."],
- votes:["DECIDE TOGETHER","Family Votes","Every family member gets a say."],
- chat:["STAY CONNECTED","Family Chat","A shared space for family messages."],
- roster:["MEET THE HOUSEHOLD","Family Roster","The people who make your family yours."],
- settings:["MAKE IT YOURS","Family Rules & Settings","Set up your family's space."]
-};
-function go(page){
- if(!titles[page])return;activePage=page;$$(".page").forEach(p=>p.classList.add("hidden"));$("#page-"+page).classList.remove("hidden");
- $$("#navigation button,[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
- const t=titles[page];$("#pageEyebrow").textContent=t[0];$("#pageTitle").textContent=t[1];$("#pageSubtitle").textContent=t[2];render();window.scrollTo({top:0,behavior:"smooth"})
-}
-function renderMemberOptions(){
- $$(".memberOptions").forEach(select=>{const previous=select.value;select.innerHTML=data.members.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");if(data.members.some(m=>m.id===previous))select.value=previous})
-}
-function renderHeader(){$("#viewLabel").textContent=data.view+" View";$("#topAvatar").textContent=initials(currentMember()?.name||"F");$("#topAvatar").title=currentMember()?.name||"Family"}
-function renderDashboard(){
- $("#statChores").textContent=`${data.chores.filter(c=>c.done).length}/${data.chores.length}`;
- $("#statPoints").textContent=data.members.reduce((sum,m)=>sum+m.points,0);
- $("#statEvents").textContent=data.events.filter(e=>e.date>=dateString(today)).length;
- $("#statShopping").textContent=data.shopping.filter(s=>!s.done).length;
- $("#dashboardChores").innerHTML=data.chores.filter(c=>!c.done).slice(0,4).map(c=>`<div class="item"><input class="check" type="checkbox" data-chore="${c.id}"><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")}</div></div><span class="pill">+${c.points}</span></div>`).join("")||empty("All caught up! No unfinished chores.");
- $("#dashboardEvents").innerHTML=data.events.filter(e=>e.date>=dateString(today)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(e=>`<div class="item"><div class="member-avatar">▦</div><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""}</div></div></div>`).join("")||empty("No upcoming events yet.");
- $("#dashboardRewards").innerHTML=data.rewards.slice(0,3).map(r=>`<div class="item"><div class="member-avatar">✧</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${r.cost} ${esc(data.pointsName)}</div></div></div>`).join("")||empty("No rewards yet.");
- $("#dashboardVotes").innerHTML=data.votes.slice(0,2).map(v=>`<div class="item"><div class="item-main"><div class="item-title">${esc(v.title)}</div><div class="item-sub">${v.options.length} options</div></div><button class="btn btn-secondary" data-go="votes">Vote</button></div>`).join("")||empty("No family votes yet.")
-}
-function renderChores(){
- const list=isParent()?data.chores:data.chores.filter(c=>c.assignee===currentMember()?.id);
- $("#choreCount").textContent=`${list.filter(c=>c.done).length}/${list.length} done`;
- $("#choreList").innerHTML=list.map(c=>`<div class="item ${c.done?"done":""}"><input class="check" type="checkbox" data-chore="${c.id}" ${c.done?"checked":""}><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")} · ${c.points} points</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-chore="${c.id}">×</button>`:""}</div>`).join("")||empty("No chores assigned here.")
-}
-function renderCalendar(){
- const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth();$("#calendarMonth").textContent=calendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
- const start=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();
- let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="day-name">${d}</div>`).join("");for(let i=0;i<start;i++)html+="<div></div>";
- for(let d=1;d<=count;d++){const ds=dateString(new Date(y,m,d));const events=data.events.filter(e=>e.date===ds);html+=`<div class="day ${ds===dateString(today)?"today":""}">${d}${events.map(e=>`<div class="day-event" title="${esc(e.title)}">${esc(e.title)}</div>`).join("")}</div>`}
- $("#calendarGrid").innerHTML=html;
- $("#eventList").innerHTML=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>`<div class="item"><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""} · ${esc(e.who)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-event="${e.id}">×</button>`:""}</div>`).join("")||empty("No events yet.")
-}
-function renderRewards(){
- $("#rewardCards").innerHTML=data.rewards.map(r=>`<div class="card span-4" style="background:var(--panel2)"><div class="stat-icon">✧</div><div class="eyebrow">REWARD</div><h3 style="font-size:16px;margin:14px 0 8px">${esc(r.title)}</h3><div class="stat-value" style="font-size:23px">${r.cost} <span style="font-size:12px;color:var(--muted)">${esc(data.pointsName)}</span></div><p class="subtitle">${esc(r.who)}</p><button class="btn btn-primary" data-redeem="${r.id}" style="margin-top:12px;width:100%">Redeem reward</button>${isParent()?`<button class="btn btn-secondary" data-delete-reward="${r.id}" style="margin-top:7px;width:100%">Remove reward</button>`:""}</div>`).join("")||empty("No rewards created yet.");
- $("#redemptionList").innerHTML=data.redemptions.slice().reverse().map(r=>`<div class="item"><div class="member-avatar">✓</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${esc(r.name)} · ${r.cost} points</div></div></div>`).join("")||empty("No rewards redeemed yet.")
-}
-function renderShopping(){
- $("#shoppingCount").textContent=`${data.shopping.filter(s=>!s.done).length} left`;
- $("#shoppingList").innerHTML=data.shopping.map(s=>`<div class="item ${s.done?"done":""}"><input class="check" type="checkbox" data-shopping="${s.id}" ${s.done?"checked":""}><div class="item-main"><div class="item-title">${esc(s.title)}</div><div class="item-sub">${s.qty?esc(s.qty)+" · ":""}${esc(s.category)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-shopping="${s.id}">×</button>`:""}</div>`).join("")||empty("Your shopping list is empty.")
-}
-function renderVotes(){
- $("#voteList").innerHTML=data.votes.map(v=>{
-  const total=Object.keys(v.votes).length,mine=v.votes[currentMember()?.id];
-  const counts=v.options.map((o,i)=>({o,i,n:Object.values(v.votes).filter(x=>x===i).length}));
-  return`<div class="card" style="padding:15px;margin-bottom:12px"><div class="section-head"><div><h2>${esc(v.title)}</h2><p>${total} vote${total===1?"":"s"} recorded</p></div>${isParent()?`<button class="btn btn-secondary" data-delete-vote="${v.id}">×</button>`:""}</div>${counts.map(c=>`<div class="vote-option"><div style="flex:1;min-width:0">${esc(c.o)}<div class="vote-bar"><div style="width:${total?c.n/total*100:0}%"></div></div></div><span>${c.n}</span><button class="btn ${mine===c.i?"btn-primary":"btn-secondary"}" data-cast-vote="${v.id}" data-option="${c.i}">${mine===c.i?"Voted":"Vote"}</button></div>`).join("")}</div>`
- }).join("")||empty("No active votes. Create the first one!")
-}
-function renderRoster(){
- $("#memberCount").textContent=`${data.members.length} members`;
- $("#rosterList").innerHTML=data.members.map(m=>`<div class="member"><div class="member-avatar">${esc(initials(m.name))}</div><div class="member-info"><div class="member-name">${esc(m.name)} ${m.name===data.currentUser?'<span class="badge">Current view</span>':""}</div><div class="member-role">${esc(m.role)} · ${m.points} ${esc(data.pointsName)}</div></div>${isParent()&&data.members.length>1?`<button class="btn btn-secondary" data-remove-member="${m.id}">Remove</button>`:""}${m.name!==data.currentUser?`<button class="btn btn-secondary" data-become="${m.id}">View as</button>`:""}</div>`).join("")
-}
-function renderRules(){
- $("#rulesList").innerHTML=data.rules.map((r,i)=>`<div class="rule"><span>✦ ${esc(r)}</span>${isParent()?`<button class="btn btn-secondary" data-delete-rule="${i}">×</button>`:""}</div>`).join("")||empty("No family rules added.");
- $("#familyName").value=data.familyName;$("#pointsName").value=data.pointsName;$("#defaultView").value=data.settings.defaultView||"Parent"
-}
-function renderChat(){
- $("#chatMessages").innerHTML=data.messages.map(m=>`<div class="chat-msg ${m.name===currentMember()?.name?"mine":""}"><div class="chat-author">${esc(m.name)}</div><div class="chat-text">${esc(m.text)}</div><div class="chat-time">${esc(m.time)}</div></div>`).join("")||empty("No messages yet. Say hello to your family!");
- $("#chatMessages").scrollTop=$("#chatMessages").scrollHeight
-}
-function render(){renderMemberOptions();renderHeader();renderDashboard();renderChores();renderCalendar();renderRewards();renderShopping();renderVotes();renderRoster();renderRules();renderChat()}
+      // Target requested view
+      const target = document.getElementById(`page-${pageId}`);
+      if (target) {
+        target.classList.remove('hidden');
+      }
 
-$("#navigation").addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(b)go(b.dataset.page)});
-$$("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
-document.addEventListener("click",e=>{
- const goBtn=e.target.closest("[data-go]");if(goBtn)go(goBtn.dataset.go);
- const del=e.target.closest("[data-delete-chore]");if(del){data.chores=data.chores.filter(c=>c.id!==del.dataset.deleteChore);save();render();toast("Chore removed.")}
- const de=e.target.closest("[data-delete-event]");if(de){data.events=data.events.filter(x=>x.id!==de.dataset.deleteEvent);save();render();toast("Event removed.")}
- const dr=e.target.closest("[data-delete-reward]");if(dr){data.rewards=data.rewards.filter(x=>x.id!==dr.dataset.deleteReward);save();render();toast("Reward removed.")}
- const ds=e.target.closest("[data-delete-shopping]");if(ds){data.shopping=data.shopping.filter(x=>x.id!==ds.dataset.deleteShopping);save();render();toast("Item removed.")}
- const dv=e.target.closest("[data-delete-vote]");if(dv){data.votes=data.votes.filter(x=>x.id!==dv.dataset.deleteVote);save();render();toast("Vote removed.")}
- const rule=e.target.closest("[data-delete-rule]");if(rule){data.rules.splice(Number(rule.dataset.deleteRule),1);save();render();toast("Rule removed.")}
- const rem=e.target.closest("[data-remove-member]");
- if(rem){const m=member(rem.dataset.removeMember);if(m&&confirm("Remove "+m.name+" from this demo roster?")){data.members=data.members.filter(x=>x.id!==m.id);data.chores.forEach(c=>{if(c.assignee===m.id)c.assignee=data.members[0]?.id||""});if(data.currentUser===m.name)data.currentUser=data.members[0]?.name||"Family";save();render();toast("Member removed.")}}
- const become=e.target.closest("[data-become]");if(become){const m=member(become.dataset.become);if(m){data.currentUser=m.name;data.view=m.role==="Parent"?"Parent":"Member";save();render();toast("Viewing as "+m.name)}}
- const redeem=e.target.closest("[data-redeem]");
- if(redeem){const r=data.rewards.find(x=>x.id===redeem.dataset.redeem),m=currentMember();if(!r||!m)return;if(r.who==="Kids"&&m.role==="Parent"){toast("This reward is for kids.");return}if(r.who==="Parents"&&m.role!=="Parent"){toast("This reward is for parents.");return}if(m.points<r.cost){toast("Not enough points yet!");return}if(confirm(`Redeem "${r.title}" for ${r.cost} points?`)){m.points-=r.cost;data.redemptions.push({title:r.title,cost:r.cost,name:m.name});save();render();toast("Reward redeemed!")}}
- const cast=e.target.closest("[data-cast-vote]");if(cast){const v=data.votes.find(x=>x.id===cast.dataset.castVote);if(v){v.votes[currentMember().id]=Number(cast.dataset.option);save();render();toast("Your vote is counted!")}}
-});
-$("#switchView").addEventListener("click",()=>{if(data.view==="Parent"){data.view="Member";const first=data.members.find(m=>m.role!=="Parent");if(first)data.currentUser=first.name}else{data.view="Parent";const first=data.members.find(m=>m.role==="Parent");if(first)data.currentUser=first.name}save();render();toast("Switched to "+data.view+" View")});
-document.addEventListener("change",e=>{
- if(e.target.matches("[data-chore]")){const c=data.chores.find(x=>x.id===e.target.dataset.chore);if(c&&!c.done){c.done=true;const m=member(c.assignee);if(m)m.points+=Number(c.points)}else if(c&&c.done&&isParent()){c.done=false;const m=member(c.assignee);if(m)m.points=Math.max(0,m.points-Number(c.points))}else if(c&&c.done){e.target.checked=true;toast("Ask a parent to reset this chore.");return}save();render();toast(c?.done?"Chore completed! Points earned.":"Chore reopened.")}
- if(e.target.matches("[data-shopping]")){const s=data.shopping.find(x=>x.id===e.target.dataset.shopping);if(s)s.done=e.target.checked;save();render()}
-});
-$("#choreForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to assign chores.");return}const f=new FormData(e.target);data.chores.push({id:uid(),title:f.get("title").trim(),assignee:f.get("assignee"),points:Math.max(1,Number(f.get("points"))||10),done:false});save();e.target.reset();render();toast("Chore added!")});
-$("#eventForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);data.events.push({id:uid(),title:f.get("title").trim(),date:f.get("date"),time:f.get("time"),who:f.get("who")});save();e.target.reset();render();toast("Event added!")});
-$("#prevMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()-1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar()});
-$("#nextMonth").addEventListener("click",()=>{calendarMonth.setMonth(calendarMonth.getMonth()+1);data.calendarMonth=calendarMonth.toISOString();save();renderCalendar()});
-$("#rewardForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to create rewards.");return}const f=new FormData(e.target);data.rewards.push({id:uid(),title:f.get("title").trim(),cost:Math.max(1,Number(f.get("cost"))||1),who:f.get("who")});save();e.target.reset();render();toast("Reward created!")});
-$("#shoppingForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);data.shopping.push({id:uid(),title:f.get("title").trim(),qty:f.get("qty").trim(),category:f.get("category"),done:false});save();e.target.reset();render();toast("Added to shopping list!")});
-$("#clearShopping").addEventListener("click",()=>{data.shopping=data.shopping.filter(s=>!s.done);save();render();toast("Checked items removed.")});
-$("#voteForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to create a vote.");return}const f=new FormData(e.target),opts=f.get("options").split(",").map(s=>s.trim()).filter(Boolean);if(opts.length<2){toast("Add at least two options.");return}data.votes.push({id:uid(),title:f.get("title").trim(),options:[...new Set(opts)],votes:{}});save();e.target.reset();render();toast("Family vote created!")});
-$("#chatForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target),msg=f.get("message").trim();if(!msg)return;data.messages.push({name:currentMember()?.name||"Family",text:msg,time:new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})});save();e.target.reset();renderChat()});
-$("#memberForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to manage members.");return}const f=new FormData(e.target),name=f.get("name").trim();if(data.members.some(m=>m.name.toLowerCase()===name.toLowerCase())){toast("That name is already on the roster.");return}data.members.push({id:uid(),name,role:f.get("role"),points:0});save();e.target.reset();render();toast("Family member added!")});
-$("#ruleForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to edit rules.");return}const f=new FormData(e.target),r=f.get("rule").trim();if(!r)return;data.rules.push(r);save();e.target.reset();renderRules();toast("Family rule added!")});
-$("#settingsForm").addEventListener("submit",e=>{e.preventDefault();if(!isParent()){toast("Switch to Parent View to change settings.");return}const f=new FormData(e.target);data.familyName=f.get("familyName").trim()||"Our Family";data.pointsName=f.get("pointsName").trim()||"Points";data.settings.defaultView=f.get("defaultView");save();render();toast("Settings saved!")});
-$("#resetData").addEventListener("click",()=>{if(confirm("Reset all FamSync beta data saved in this browser? This cannot be undone.")){data=initialData();calendarMonth=new Date(data.calendarMonth);save();go("dashboard");toast("Demo data reset.")}});
-if(!data.members.length){data.members=initialData().members;data.currentUser=data.members[0].name}
-if(!data.members.some(m=>m.name===data.currentUser))data.currentUser=data.members[0].name;
-render();
-</script>
+      // Update Navigation Active States
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const isActive = btn.getAttribute('data-page') === pageId;
+        if (isActive) {
+          btn.classList.add('bg-indigo-50', 'text-indigo-600', 'font-semibold');
+          btn.classList.remove('text-slate-600', 'text-slate-500');
+        } else {
+          btn.classList.remove('bg-indigo-50', 'text-indigo-600', 'font-semibold');
+          btn.classList.add('text-slate-600');
+        }
+      });
+    }
 
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {
- getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,
- GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import {getFirestore} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    // Modal Control Helper
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      const backdrop = document.getElementById('modalBackdrop');
+      if (modal && backdrop) {
+        backdrop.classList.remove('hidden');
+        modal.classList.remove('hidden');
+      }
+    }
 
-const firebaseConfig={
- apiKey:"AIzaSyDXWw6Bu9KIxUK3rBIj71PIJJp1zqxVtLE",
- authDomain:"famsync-755b8.firebaseapp.com",
- projectId:"famsync-755b8",
- storageBucket:"famsync-755b8.firebasestorage.app",
- messagingSenderId:"515752003098",
- appId:"1:515752003098:web:e8d6157ce02f044dc3f3a3"
-};
+    function closeModals() {
+      const backdrop = document.getElementById('modalBackdrop');
+      if (backdrop) backdrop.classList.add('hidden');
+      document.querySelectorAll('.modal-dialog').forEach(m => m.classList.add('hidden'));
+    }
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+    // Toast Notification System
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      if (toast && msg) {
+        msg.textContent = message;
+        toast.classList.remove('hidden');
+        toast.classList.remove('translate-y-10');
+        setTimeout(() => {
+          toast.classList.add('translate-y-10');
+          setTimeout(() => toast.classList.add('hidden'), 300);
+        }, 2500);
+      }
+    }
 
-const screen=document.getElementById("authScreen");
-const form=document.getElementById("authForm");
-const email=document.getElementById("authEmail");
-const password=document.getElementById("authPassword");
-const message=document.getElementById("authMessage");
+    // Render Engine
+    function renderApp() {
+      // 1. Update Profile Info
+      const currentNameEl = document.getElementById('current-user-name');
+      const initialEl = document.getElementById('user-avatar-initial');
+      const pointsEl = document.getElementById('user-points-total');
+      
+      if (currentNameEl) currentNameEl.textContent = AppState.currentUser;
+      if (initialEl) initialEl.textContent = AppState.currentUser.charAt(0);
+      if (pointsEl) pointsEl.textContent = `${AppState.points} pts`;
 
-function showError(error){
- const errors={
-  "auth/invalid-credential":"Incorrect email or password.",
-  "auth/email-already-in-use":"That email already has an account. Sign in instead.",
-  "auth/weak-password":"Your password needs at least 6 characters.",
-  "auth/invalid-email":"Enter a valid email address.",
-  "auth/popup-closed-by-user":"Google sign-in was canceled.",
-  "auth/popup-blocked":"Your browser blocked the Google sign-in pop-up.",
-  "auth/network-request-failed":"Network error. Check your internet connection and try again.",
-  "auth/operation-not-allowed":"This sign-in method is not enabled in Firebase."
- };
- message.textContent=errors[error.code]||error.message||"Something went wrong.";
-}
+      // 2. Render Chores
+      const choresContainer = document.getElementById('chores-container');
+      if (choresContainer) {
+        choresContainer.innerHTML = AppState.chores.map(c => `
+          <div class="bg-white p-5 rounded-2xl border ${c.completed ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200'} shadow-sm flex flex-col justify-between space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="font-bold text-slate-800 ${c.completed ? 'line-through text-slate-400' : ''}">${c.title}</h4>
+                <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-user text-indigo-400 mr-1"></i>${c.assignee}</p>
+              </div>
+              <span class="text-xs font-bold px-2.5 py-1 bg-amber-50 text-amber-600 rounded-lg border border-amber-200">+${c.points} pts</span>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+              <button data-action="toggleChore" data-id="${c.id}" class="text-xs font-semibold px-3 py-1.5 rounded-xl transition-all ${c.completed ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
+                <i class="fa-solid ${c.completed ? 'fa-circle-check' : 'fa-circle'} mr-1"></i>
+                ${c.completed ? 'Completed' : 'Mark Done'}
+              </button>
+              <button data-action="deleteChore" data-id="${c.id}" class="text-slate-300 hover:text-rose-500 p-1">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
 
-form.addEventListener("submit",async event=>{
- event.preventDefault();
- if(!form.reportValidity())return;
- message.textContent="Signing in...";
- try{await signInWithEmailAndPassword(auth,email.value.trim(),password.value)}
- catch(error){showError(error)}
-});
+      // 3. Render Calendar
+      const calContainer = document.getElementById('calendar-container');
+      if (calContainer) {
+        calContainer.innerHTML = AppState.calendar.map(evt => {
+          const d = new Date(evt.date);
+          return `
+            <div class="p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl flex items-center gap-4">
+              <div class="bg-indigo-600 text-white rounded-xl p-3 text-center min-w-[60px]">
+                <div class="text-xs uppercase font-bold">${d.toLocaleString('default', { month: 'short' })}</div>
+                <div class="text-xl font-extrabold">${d.getDate()}</div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">${evt.title}</h4>
+                <p class="text-xs text-slate-500 mt-0.5"><i class="fa-regular fa-clock mr-1"></i>${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
 
-document.getElementById("signupBtn").addEventListener("click",async()=>{
- if(!form.reportValidity())return;
- message.textContent="Creating account...";
- try{await createUserWithEmailAndPassword(auth,email.value.trim(),password.value)}
- catch(error){showError(error)}
-});
+      // 4. Render Shopping
+      const shopContainer = document.getElementById('shopping-container');
+      if (shopContainer) {
+        shopContainer.innerHTML = AppState.shopping.map(s => `
+          <div class="py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" ${s.checked ? 'checked' : ''} data-action="toggleShop" data-id="${s.id}" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer">
+              <span class="text-sm font-medium ${s.checked ? 'line-through text-slate-400' : 'text-slate-700'}">${s.name}</span>
+            </div>
+            <button data-action="deleteShop" data-id="${s.id}" class="text-slate-300 hover:text-rose-500 p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+        `).join('');
+      }
 
-document.getElementById("googleBtn").addEventListener("click",async()=>{
- message.textContent="Opening Google sign-in...";
- try{await signInWithPopup(auth,new GoogleAuthProvider())}
- catch(error){showError(error)}
-});
+      // 5. Render Rewards
+      const rewardsContainer = document.getElementById('rewards-container');
+      if (rewardsContainer) {
+        rewardsContainer.innerHTML = AppState.rewards.map(r => `
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid ${r.icon}"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800">${r.title}</h4>
+                <p class="text-xs text-amber-600 font-semibold">${r.points} Points Needed</p>
+              </div>
+            </div>
+            <button data-action="claimReward" data-cost="${r.points}" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-md transition-all">
+              Claim Reward
+            </button>
+          </div>
+        `).join('');
+      }
 
-const topActionsEl = document.querySelector(".top-actions");
-let signOutButton = document.getElementById("signOutBtn");
-if (!signOutButton) {
- signOutButton = document.createElement("button");
- signOutButton.id = "signOutBtn";
- signOutButton.className = "btn btn-secondary";
- signOutButton.textContent = "Sign Out";
- topActionsEl.appendChild(signOutButton);
-}
+      // 6. Render Polls
+      const votesContainer = document.getElementById('votes-container');
+      if (votesContainer) {
+        votesContainer.innerHTML = AppState.polls.map(p => `
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <h4 class="font-bold text-slate-900">${p.question}</h4>
+            <div class="space-y-2">
+              ${p.options.map((opt, idx) => `
+                <button data-action="vote" data-poll="${p.id}" data-opt="${idx}" class="w-full p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-200 rounded-xl flex justify-between items-center text-sm font-medium transition-all">
+                  <span>${opt.text}</span>
+                  <span class="bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full text-xs font-bold">${opt.votes} votes</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
 
-signOutButton.addEventListener("click",async()=>{
- try{await signOut(auth)}
- catch(error){alert(error.message)}
-});
+      // 7. Render Chat Messages
+      const chatContainer = document.getElementById('chat-container');
+      if (chatContainer) {
+        chatContainer.innerHTML = AppState.messages.map(m => {
+          const isMe = m.user === AppState.currentUser;
+          return `
+            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+              <div class="text-[10px] text-slate-400 mb-1 px-1">${m.user} • ${m.time}</div>
+              <div class="max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${isMe ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-100 text-slate-800 rounded-tl-none'}">
+                ${m.text}
+              </div>
+            </div>
+          `;
+        }).join('');
+        // Auto scroll to bottom
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }
 
-onAuthStateChanged(auth,user=>{
- document.body.classList.toggle("logged-in",!!user);
- screen.style.display=user?"none":"block";
- signOutButton.style.display=user?"":"none";
- if(user){
-   console.log("Signed in:",user.email);
-   setTimeout(() => {
-     render();
-   }, 50);
- }
-});
+    // AUTH / LOGIN LOGIC
+    function performLogin(selectedUser) {
+      if (selectedUser) AppState.currentUser = selectedUser;
+      document.body.classList.add('logged-in');
+      switchPage('chores');
+      renderApp();
+      showToast(`Welcome back, ${AppState.currentUser}!`);
+    }
 
-console.log("Firebase initialized.");
-</script>
+    function performLogout() {
+      document.body.classList.remove('logged-in');
+      showToast("Logged out successfully");
+    }
+
+    // =========================================================================
+    // KEY FIX: GLOBAL DOCUMENT DELEGATION LISTENERS
+    // Solves all issues with detached, unattached, or overridden event listeners
+    // =========================================================================
+
+    // 1. Click Listener Delegation
+    document.addEventListener('click', (e) => {
+      // Find closest interactive target
+      const navBtn = e.target.closest('[data-page]');
+      const actionBtn = e.target.closest('[data-action]');
+      const modalTrigger = e.target.closest('[data-go]');
+
+      // A. Handle Navigation Tab Switching
+      if (navBtn) {
+        e.preventDefault();
+        const page = navBtn.getAttribute('data-page');
+        switchPage(page);
+        return;
+      }
+
+      // B. Handle Modal Opening
+      if (modalTrigger) {
+        e.preventDefault();
+        const targetModal = modalTrigger.getAttribute('data-go');
+        openModal(targetModal);
+        return;
+      }
+
+      // C. Handle Actions
+      if (actionBtn) {
+        e.preventDefault();
+        const action = actionBtn.getAttribute('data-action');
+
+        switch (action) {
+          case 'login':
+            const select = document.getElementById('userSelect');
+            performLogin(select ? select.value : 'Mom (Sarah)');
+            break;
+
+          case 'logout':
+            performLogout();
+            break;
+
+          case 'closeModal':
+            closeModals();
+            break;
+
+          case 'toggleChore':
+            const choreId = parseInt(actionBtn.getAttribute('data-id'));
+            const chore = AppState.chores.find(c => c.id === choreId);
+            if (chore) {
+              chore.completed = !chore.completed;
+              if (chore.completed) AppState.points += chore.points;
+              else AppState.points = Math.max(0, AppState.points - chore.points);
+              renderApp();
+              showToast(chore.completed ? "Chore completed!" : "Chore uncompleted");
+            }
+            break;
+
+          case 'deleteChore':
+            const delChoreId = parseInt(actionBtn.getAttribute('data-id'));
+            AppState.chores = AppState.chores.filter(c => c.id !== delChoreId);
+            renderApp();
+            showToast("Chore deleted");
+            break;
+
+          case 'deleteShop':
+            const delShopId = parseInt(actionBtn.getAttribute('data-id'));
+            AppState.shopping = AppState.shopping.filter(s => s.id !== delShopId);
+            renderApp();
+            break;
+
+          case 'claimReward':
+            const cost = parseInt(actionBtn.getAttribute('data-cost'));
+            if (AppState.points >= cost) {
+              AppState.points -= cost;
+              renderApp();
+              showToast("Reward Claimed!");
+            } else {
+              showToast("Not enough points!");
+            }
+            break;
+
+          case 'vote':
+            const pollId = parseInt(actionBtn.getAttribute('data-poll'));
+            const optIdx = parseInt(actionBtn.getAttribute('data-opt'));
+            const poll = AppState.polls.find(p => p.id === pollId);
+            if (poll && poll.options[optIdx]) {
+              poll.options[optIdx].votes++;
+              renderApp();
+              showToast("Vote recorded!");
+            }
+            break;
+        }
+      }
+    });
+
+    // 2. Change Listener Delegation (e.g., Checkboxes)
+    document.addEventListener('change', (e) => {
+      const target = e.target;
+      if (target.matches('[data-action="toggleShop"]')) {
+        const id = parseInt(target.getAttribute('data-id'));
+        const item = AppState.shopping.find(s => s.id === id);
+        if (item) {
+          item.checked = target.checked;
+          renderApp();
+        }
+      }
+    });
+
+    // 3. Form Submission Delegation
+    document.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formId = e.target.id;
+
+      if (formId === 'loginForm') {
+        const select = document.getElementById('userSelect');
+        performLogin(select ? select.value : 'Mom (Sarah)');
+      } 
+      else if (formId === 'addChoreForm') {
+        const title = document.getElementById('choreTitle').value;
+        const assignee = document.getElementById('choreAssignee').value;
+        const points = parseInt(document.getElementById('chorePoints').value) || 10;
+
+        AppState.chores.push({
+          id: Date.now(),
+          title,
+          assignee,
+          points,
+          completed: false
+        });
+
+        closeModals();
+        renderApp();
+        e.target.reset();
+        showToast("New chore added!");
+      } 
+      else if (formId === 'addEventForm') {
+        const title = document.getElementById('eventTitle').value;
+        const date = document.getElementById('eventDate').value;
+
+        AppState.calendar.push({
+          id: Date.now(),
+          title,
+          date
+        });
+
+        closeModals();
+        renderApp();
+        e.target.reset();
+        showToast("Event added to calendar!");
+      } 
+      else if (formId === 'shoppingForm') {
+        const input = document.getElementById('shoppingInput');
+        if (input && input.value.trim()) {
+          AppState.shopping.push({
+            id: Date.now(),
+            name: input.value.trim(),
+            checked: false
+          });
+          input.value = '';
+          renderApp();
+        }
+      } 
+      else if (formId === 'chatForm') {
+        const input = document.getElementById('chatInput');
+        if (input && input.value.trim()) {
+          const now = new Date();
+          AppState.messages.push({
+            id: Date.now(),
+            user: AppState.currentUser,
+            text: input.value.trim(),
+            time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+          input.value = '';
+          renderApp();
+        }
+      }
+    });
+
+    // Initialize state on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderApp();
+    });
+  </script>
 </body>
 </html>
