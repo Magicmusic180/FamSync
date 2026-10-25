@@ -101,7 +101,6 @@ label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
 </head>
 <body>
 
-<!-- Login screen must be inside the body and before the dashboard. -->
 <div id="authScreen">
   <h2>Welcome to FamSync</h2>
   <p class="subtitle">Sign in or create your family account.</p>
@@ -252,7 +251,7 @@ label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
   <div class="card span-6"><div class="section-head"><div><h2>Family Rules</h2><p>Keep household expectations clear.</p></div></div><div id="rulesList"></div>
     <form id="ruleForm" style="display:flex;gap:8px;margin-top:15px"><input name="rule" placeholder="Add a family rule..." required><button class="btn btn-primary">Add</button></form>
   </div>
-  <div class="card span-6"><div class="section-head"><div><h2>Family Settings</h2><p>Customize this beta experience.</p></div></div>
+  <div class="card span-6"><div class="section-head"><div>## Family Settings</h2><p>Customize this beta experience.</p></div></div>
     <form id="settingsForm" class="form">
       <div class="field full"><label>Family name</label><input id="familyName" name="familyName" placeholder="Our Family"></div>
       <div class="field full"><label>Points name</label><input id="pointsName" name="pointsName" placeholder="Points"></div>
@@ -271,7 +270,7 @@ label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const today=new Date();
-const dateString=d=>${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")};
+const dateString=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const uid=()=>Math.random().toString(36).slice(2,10);
 const initialData=()=>({
  familyName:"Our Family",pointsName:"Points",view:"Parent",currentUser:"Alex",
@@ -295,7 +294,7 @@ function currentMember(){return data.members.find(m=>m.name===data.currentUser)|
 function isParent(){return data.view==="Parent"}
 function points(){return currentMember()?.points||0}
 function initials(name){return(name||"?").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
-function empty(msg){return<div class="empty">${esc(msg)}</div>}
+function empty(msg){return`<div class="empty">${esc(msg)}</div>`}
 function safeDate(s){if(!s)return null;const d=new Date(s+"T12:00:00");return Number.isNaN(d.getTime())?null:d}
 function prettyDate(s){const d=safeDate(s);return d?d.toLocaleDateString(undefined,{month:"short",day:"numeric"}):"No date"}
 function toast(message){
@@ -319,57 +318,57 @@ function go(page){
  const t=titles[page];$("#pageEyebrow").textContent=t[0];$("#pageTitle").textContent=t[1];$("#pageSubtitle").textContent=t[2];render();window.scrollTo({top:0,behavior:"smooth"})
 }
 function renderMemberOptions(){
- $$(".memberOptions").forEach(select=>{const previous=select.value;select.innerHTML=data.members.map(m=><option value="${esc(m.id)}">${esc(m.name)}</option>).join("");if(data.members.some(m=>m.id===previous))select.value=previous})
+ $$(".memberOptions").forEach(select=>{const previous=select.value;select.innerHTML=data.members.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");if(data.members.some(m=>m.id===previous))select.value=previous})
 }
 function renderHeader(){$("#viewLabel").textContent=data.view+" View";$("#topAvatar").textContent=initials(currentMember()?.name||"F");$("#topAvatar").title=currentMember()?.name||"Family"}
 function renderDashboard(){
- $("#statChores").textContent=${data.chores.filter(c=>c.done).length}/${data.chores.length};
+ $("#statChores").textContent=`${data.chores.filter(c=>c.done).length}/${data.chores.length}`;
  $("#statPoints").textContent=data.members.reduce((sum,m)=>sum+m.points,0);
  $("#statEvents").textContent=data.events.filter(e=>e.date>=dateString(today)).length;
  $("#statShopping").textContent=data.shopping.filter(s=>!s.done).length;
- $("#dashboardChores").innerHTML=data.chores.filter(c=>!c.done).slice(0,4).map(c=><div class="item"><input class="check" type="checkbox" data-chore="${c.id}"><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")}</div></div><span class="pill">+${c.points}</span></div>).join("")||empty("All caught up! No unfinished chores.");
- $("#dashboardEvents").innerHTML=data.events.filter(e=>e.date>=dateString(today)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(e=><div class="item"><div class="member-avatar">▦</div><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""}</div></div></div>).join("")||empty("No upcoming events yet.");
- $("#dashboardRewards").innerHTML=data.rewards.slice(0,3).map(r=><div class="item"><div class="member-avatar">✧</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${r.cost} ${esc(data.pointsName)}</div></div></div>).join("")||empty("No rewards yet.");
- $("#dashboardVotes").innerHTML=data.votes.slice(0,2).map(v=><div class="item"><div class="item-main"><div class="item-title">${esc(v.title)}</div><div class="item-sub">${v.options.length} options</div></div><button class="btn btn-secondary" data-go="votes">Vote</button></div>).join("")||empty("No family votes yet.")
+ $("#dashboardChores").innerHTML=data.chores.filter(c=>!c.done).slice(0,4).map(c=>`<div class="item"><input class="check" type="checkbox" data-chore="${c.id}"><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")}</div></div><span class="pill">+${c.points}</span></div>`).join("")||empty("All caught up! No unfinished chores.");
+ $("#dashboardEvents").innerHTML=data.events.filter(e=>e.date>=dateString(today)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(e=>`<div class="item"><div class="member-avatar">▦</div><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""}</div></div></div>`).join("")||empty("No upcoming events yet.");
+ $("#dashboardRewards").innerHTML=data.rewards.slice(0,3).map(r=>`<div class="item"><div class="member-avatar">✧</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${r.cost} ${esc(data.pointsName)}</div></div></div>`).join("")||empty("No rewards yet.");
+ $("#dashboardVotes").innerHTML=data.votes.slice(0,2).map(v=>`<div class="item"><div class="item-main"><div class="item-title">${esc(v.title)}</div><div class="item-sub">${v.options.length} options</div></div><button class="btn btn-secondary" data-go="votes">Vote</button></div>`).join("")||empty("No family votes yet.")
 }
 function renderChores(){
  const list=isParent()?data.chores:data.chores.filter(c=>c.assignee===currentMember()?.id);
- $("#choreCount").textContent=${list.filter(c=>c.done).length}/${list.length} done;
- $("#choreList").innerHTML=list.map(c=><div class="item ${c.done?"done":""}"><input class="check" type="checkbox" data-chore="${c.id}" ${c.done?"checked":""}><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")} · ${c.points} points</div></div>${isParent()?<button class="btn btn-secondary" data-delete-chore="${c.id}">×</button>:""}</div>).join("")||empty("No chores assigned here.")
+ $("#choreCount").textContent=`${list.filter(c=>c.done).length}/${list.length} done`;
+ $("#choreList").innerHTML=list.map(c=>`<div class="item ${c.done?"done":""}"><input class="check" type="checkbox" data-chore="${c.id}" ${c.done?"checked":""}><div class="item-main"><div class="item-title">${esc(c.title)}</div><div class="item-sub">${esc(member(c.assignee)?.name||"Unassigned")} · ${c.points} points</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-chore="${c.id}">×</button>`:""}</div>`).join("")||empty("No chores assigned here.")
 }
 function renderCalendar(){
  const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth();$("#calendarMonth").textContent=calendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
  const start=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();
- let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=><div class="day-name">${d}</div>).join("");for(let i=0;i<start;i++)html+="<div></div>";
- for(let d=1;d<=count;d++){const ds=dateString(new Date(y,m,d));const events=data.events.filter(e=>e.date===ds);html+=<div class="day ${ds===dateString(today)?"today":""}">${d}${events.map(e=><div class="day-event" title="${esc(e.title)}">${esc(e.title)}</div>).join("")}</div>}
+ let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="day-name">${d}</div>`).join("");for(let i=0;i<start;i++)html+="<div></div>";
+ for(let d=1;d<=count;d++){const ds=dateString(new Date(y,m,d));const events=data.events.filter(e=>e.date===ds);html+=`<div class="day ${ds===dateString(today)?"today":""}">${d}${events.map(e=>`<div class="day-event" title="${esc(e.title)}">${esc(e.title)}</div>`).join("")}</div>`}
  $("#calendarGrid").innerHTML=html;
- $("#eventList").innerHTML=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=><div class="item"><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""} · ${esc(e.who)}</div></div>${isParent()?<button class="btn btn-secondary" data-delete-event="${e.id}">×</button>:""}</div>).join("")||empty("No events yet.")
+ $("#eventList").innerHTML=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>`<div class="item"><div class="item-main"><div class="item-title">${esc(e.title)}</div><div class="item-sub">${prettyDate(e.date)}${e.time?" · "+esc(e.time):""} · ${esc(e.who)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-event="${e.id}">×</button>`:""}</div>`).join("")||empty("No events yet.")
 }
 function renderRewards(){
- $("#rewardCards").innerHTML=data.rewards.map(r=><div class="card span-4" style="background:var(--panel2)"><div class="stat-icon">✧</div><div class="eyebrow">REWARD</div><h3 style="font-size:16px;margin:14px 0 8px">${esc(r.title)}</h3><div class="stat-value" style="font-size:23px">${r.cost} <span style="font-size:12px;color:var(--muted)">${esc(data.pointsName)}</span></div><p class="subtitle">${esc(r.who)}</p><button class="btn btn-primary" data-redeem="${r.id}" style="margin-top:12px;width:100%">Redeem reward</button>${isParent()?<button class="btn btn-secondary" data-delete-reward="${r.id}" style="margin-top:7px;width:100%">Remove reward</button>:""}</div>).join("")||empty("No rewards created yet.");
- $("#redemptionList").innerHTML=data.redemptions.slice().reverse().map(r=><div class="item"><div class="member-avatar">✓</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${esc(r.name)} · ${r.cost} points</div></div></div>).join("")||empty("No rewards redeemed yet.")
+ $("#rewardCards").innerHTML=data.rewards.map(r=>`<div class="card span-4" style="background:var(--panel2)"><div class="stat-icon">✧</div><div class="eyebrow">REWARD</div><h3 style="font-size:16px;margin:14px 0 8px">${esc(r.title)}</h3><div class="stat-value" style="font-size:23px">${r.cost} <span style="font-size:12px;color:var(--muted)">${esc(data.pointsName)}</span></div><p class="subtitle">${esc(r.who)}</p><button class="btn btn-primary" data-redeem="${r.id}" style="margin-top:12px;width:100%">Redeem reward</button>${isParent()?`<button class="btn btn-secondary" data-delete-reward="${r.id}" style="margin-top:7px;width:100%">Remove reward</button>`:""}</div>`).join("")||empty("No rewards created yet.");
+ $("#redemptionList").innerHTML=data.redemptions.slice().reverse().map(r=>`<div class="item"><div class="member-avatar">✓</div><div class="item-main"><div class="item-title">${esc(r.title)}</div><div class="item-sub">${esc(r.name)} · ${r.cost} points</div></div></div>`).join("")||empty("No rewards redeemed yet.")
 }
 function renderShopping(){
- $("#shoppingCount").textContent=${data.shopping.filter(s=>!s.done).length} left;
- $("#shoppingList").innerHTML=data.shopping.map(s=><div class="item ${s.done?"done":""}"><input class="check" type="checkbox" data-shopping="${s.id}" ${s.done?"checked":""}><div class="item-main"><div class="item-title">${esc(s.title)}</div><div class="item-sub">${s.qty?esc(s.qty)+" · ":""}${esc(s.category)}</div></div>${isParent()?<button class="btn btn-secondary" data-delete-shopping="${s.id}">×</button>:""}</div>).join("")||empty("Your shopping list is empty.")
+ $("#shoppingCount").textContent=`${data.shopping.filter(s=>!s.done).length} left`;
+ $("#shoppingList").innerHTML=data.shopping.map(s=>`<div class="item ${s.done?"done":""}"><input class="check" type="checkbox" data-shopping="${s.id}" ${s.done?"checked":""}><div class="item-main"><div class="item-title">${esc(s.title)}</div><div class="item-sub">${s.qty?esc(s.qty)+" · ":""}${esc(s.category)}</div></div>${isParent()?`<button class="btn btn-secondary" data-delete-shopping="${s.id}">×</button>`:""}</div>`).join("")||empty("Your shopping list is empty.")
 }
 function renderVotes(){
  $("#voteList").innerHTML=data.votes.map(v=>{
   const total=Object.keys(v.votes).length,mine=v.votes[currentMember()?.id];
   const counts=v.options.map((o,i)=>({o,i,n:Object.values(v.votes).filter(x=>x===i).length}));
-  return<div class="card" style="padding:15px;margin-bottom:12px"><div class="section-head"><div><h2>${esc(v.title)}</h2><p>${total} vote${total===1?"":"s"} recorded</p></div>${isParent()?<button class="btn btn-secondary" data-delete-vote="${v.id}">×</button>:""}</div>${counts.map(c=><div class="vote-option"><div style="flex:1;min-width:0">${esc(c.o)}<div class="vote-bar"><div style="width:${total?c.n/total*100:0}%"></div></div></div><span>${c.n}</span><button class="btn ${mine===c.i?"btn-primary":"btn-secondary"}" data-cast-vote="${v.id}" data-option="${c.i}">${mine===c.i?"Voted":"Vote"}</button></div>).join("")}</div>
+  return`<div class="card" style="padding:15px;margin-bottom:12px"><div class="section-head"><div><h2>${esc(v.title)}</h2><p>${total} vote${total===1?"":"s"} recorded</p></div>${isParent()?`<button class="btn btn-secondary" data-delete-vote="${v.id}">×</button>`:""}</div>${counts.map(c=>`<div class="vote-option"><div style="flex:1;min-width:0">${esc(c.o)}<div class="vote-bar"><div style="width:${total?c.n/total*100:0}%"></div></div></div><span>${c.n}</span><button class="btn ${mine===c.i?"btn-primary":"btn-secondary"}" data-cast-vote="${v.id}" data-option="${c.i}">${mine===c.i?"Voted":"Vote"}</button></div>`).join("")}</div>`
  }).join("")||empty("No active votes. Create the first one!")
 }
 function renderRoster(){
- $("#memberCount").textContent=${data.members.length} members;
- $("#rosterList").innerHTML=data.members.map(m=><div class="member"><div class="member-avatar">${esc(initials(m.name))}</div><div class="member-info"><div class="member-name">${esc(m.name)} ${m.name===data.currentUser?'<span class="badge">Current view</span>':""}</div><div class="member-role">${esc(m.role)} · ${m.points} ${esc(data.pointsName)}</div></div>${isParent()&&data.members.length>1?<button class="btn btn-secondary" data-remove-member="${m.id}">Remove</button>:""}${m.name!==data.currentUser?<button class="btn btn-secondary" data-become="${m.id}">View as</button>:""}</div>).join("")
+ $("#memberCount").textContent=`${data.members.length} members`;
+ $("#rosterList").innerHTML=data.members.map(m=>`<div class="member"><div class="member-avatar">${esc(initials(m.name))}</div><div class="member-info"><div class="member-name">${esc(m.name)} ${m.name===data.currentUser?'<span class="badge">Current view</span>':""}</div><div class="member-role">${esc(m.role)} · ${m.points} ${esc(data.pointsName)}</div></div>${isParent()&&data.members.length>1?`<button class="btn btn-secondary" data-remove-member="${m.id}">Remove</button>`:""}${m.name!==data.currentUser?`<button class="btn btn-secondary" data-become="${m.id}">View as</button>`:""}</div>`).join("")
 }
 function renderRules(){
- $("#rulesList").innerHTML=data.rules.map((r,i)=><div class="rule"><span>✦ ${esc(r)}</span>${isParent()?<button class="btn btn-secondary" data-delete-rule="${i}">×</button>:""}</div>).join("")||empty("No family rules added.");
+ $("#rulesList").innerHTML=data.rules.map((r,i)=>`<div class="rule"><span>✦ ${esc(r)}</span>${isParent()?`<button class="btn btn-secondary" data-delete-rule="${i}">×</button>`:""}</div>`).join("")||empty("No family rules added.");
  $("#familyName").value=data.familyName;$("#pointsName").value=data.pointsName;$("#defaultView").value=data.settings.defaultView||"Parent"
 }
 function renderChat(){
- $("#chatMessages").innerHTML=data.messages.map(m=><div class="chat-msg ${m.name===currentMember()?.name?"mine":""}"><div class="chat-author">${esc(m.name)}</div><div class="chat-text">${esc(m.text)}</div><div class="chat-time">${esc(m.time)}</div></div>).join("")||empty("No messages yet. Say hello to your family!");
+ $("#chatMessages").innerHTML=data.messages.map(m=>`<div class="chat-msg ${m.name===currentMember()?.name?"mine":""}"><div class="chat-author">${esc(m.name)}</div><div class="chat-text">${esc(m.text)}</div><div class="chat-time">${esc(m.time)}</div></div>`).join("")||empty("No messages yet. Say hello to your family!");
  $("#chatMessages").scrollTop=$("#chatMessages").scrollHeight
 }
 function render(){renderMemberOptions();renderHeader();renderDashboard();renderChores();renderCalendar();renderRewards();renderShopping();renderVotes();renderRoster();renderRules();renderChat()}
@@ -388,7 +387,7 @@ document.addEventListener("click",e=>{
  if(rem){const m=member(rem.dataset.removeMember);if(m&&confirm("Remove "+m.name+" from this demo roster?")){data.members=data.members.filter(x=>x.id!==m.id);data.chores.forEach(c=>{if(c.assignee===m.id)c.assignee=data.members[0]?.id||""});if(data.currentUser===m.name)data.currentUser=data.members[0]?.name||"Family";save();render();toast("Member removed.")}}
  const become=e.target.closest("[data-become]");if(become){const m=member(become.dataset.become);if(m){data.currentUser=m.name;data.view=m.role==="Parent"?"Parent":"Member";save();render();toast("Viewing as "+m.name)}}
  const redeem=e.target.closest("[data-redeem]");
- if(redeem){const r=data.rewards.find(x=>x.id===redeem.dataset.redeem),m=currentMember();if(!r||!m)return;if(r.who==="Kids"&&m.role==="Parent"){toast("This reward is for kids.");return}if(r.who==="Parents"&&m.role!=="Parent"){toast("This reward is for parents.");return}if(m.points<r.cost){toast("Not enough points yet!");return}if(confirm(Redeem "${r.title}" for ${r.cost} points?)){m.points-=r.cost;data.redemptions.push({title:r.title,cost:r.cost,name:m.name});save();render();toast("Reward redeemed!")}}
+ if(redeem){const r=data.rewards.find(x=>x.id===redeem.dataset.redeem),m=currentMember();if(!r||!m)return;if(r.who==="Kids"&&m.role==="Parent"){toast("This reward is for kids.");return}if(r.who==="Parents"&&m.role!=="Parent"){toast("This reward is for parents.");return}if(m.points<r.cost){toast("Not enough points yet!");return}if(confirm(`Redeem "${r.title}" for ${r.cost} points?`)){m.points-=r.cost;data.redemptions.push({title:r.title,cost:r.cost,name:m.name});save();render();toast("Reward redeemed!")}}
  const cast=e.target.closest("[data-cast-vote]");if(cast){const v=data.votes.find(x=>x.id===cast.dataset.castVote);if(v){v.votes[currentMember().id]=Number(cast.dataset.option);save();render();toast("Your vote is counted!")}}
 });
 $("#switchView").addEventListener("click",()=>{if(data.view==="Parent"){data.view="Member";const first=data.members.find(m=>m.role!=="Parent");if(first)data.currentUser=first.name}else{data.view="Parent";const first=data.members.find(m=>m.role==="Parent");if(first)data.currentUser=first.name}save();render();toast("Switched to "+data.view+" View")});
@@ -491,7 +490,10 @@ onAuthStateChanged(auth,user=>{
  document.body.classList.toggle("logged-in",!!user);
  screen.style.display=user?"none":"block";
  signOutButton.style.display=user?"":"none";
- if(user)console.log("Signed in:",user.email);
+ if(user){
+   console.log("Signed in:",user.email);
+   render();
+ }
 });
 
 console.log("Firebase initialized.");
